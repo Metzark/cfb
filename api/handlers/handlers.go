@@ -41,6 +41,6 @@ func Teams(w http.ResponseWriter, r *http.Request){
 		}
 	}
 
-	tmpl := template.Must(template.ParseFiles("web/html/index.html"))
+	tmpl := template.Must(template.ParseFiles("web/html/teams/index.html"))
 	tmpl.Execute(w, team)
 }

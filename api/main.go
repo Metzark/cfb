@@ -12,7 +12,7 @@ import (
 func main(){
 
     fs := http.FileServer(http.Dir("web/static"))
-    http.Handle("/static/", http.StripPrefix("/static/", fs))
+    http.Handle("GET /static/", http.StripPrefix("/static/", fs))
 
     http.HandleFunc("GET /teams/", handle.Teams)
 
