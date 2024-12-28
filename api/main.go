@@ -10,7 +10,11 @@ import (
 
 
 func main(){
-    http.HandleFunc("GET /", handle.Teams)
+
+    fs := http.FileServer(http.Dir("web/static"))
+    http.Handle("/static/", http.StripPrefix("/static/", fs))
+
+    http.HandleFunc("GET /teams/", handle.Teams)
 
     fmt.Println("Running on 8080")
     log.Fatal(http.ListenAndServe(":8080", nil))

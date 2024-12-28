@@ -1,0 +1,38 @@
+:root {
+  font-size: 62.5%;
+
+  /* Colors */
+  --white: #e0e0e0;
+  --dark-grey: #3c3c42;
+  --light-grey: #d3d3d3;
+
+  /* Sizes */
+  --nav-height: 5.4rem;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Ubuntu";
+  height: 100vh;
+  width: 100vw;
+  background: var(--light-grey);
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  height: var(--nav-height);
+  background: var(--dark-grey);
+  color: var(--white);
+  padding: 0.5rem 1rem;
+}
+
+.logo {
+  font-size: 3.6rem;
+  font-weight: 600;
+}
