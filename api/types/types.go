@@ -11,6 +11,9 @@ type Team struct {
 	School string `json:"school"`
 	Mascot string `json:"mascot"`
 	Abbreviation string `json:"abbreviation"`
+	AltName1 string `json:"alt_name1"`
+	AltName2 string `json:"alt_name2"`
+	AltName3 string `json:"alt_name3"`
 	Conference string `json:"conference"`
 	Color string `json:"color"`
 	AltColor string `json:"alt_color"`
@@ -46,7 +49,7 @@ type SMTeam struct {
 // For Teams HTML template
 type TeamsTMPLParams struct {
 	Team *Team `json:"team"`
-	SearchTeamsURL string `json:"searchTeamsURL"`
+	ServerURL string `json:"serverURL"`
 }
 
 // Response struct for /search-teams route

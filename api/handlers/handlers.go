@@ -12,7 +12,10 @@ import (
 	t "github.com/Metzark/cfb/api/types"
 )
 
+var serverUrl string  = "http://localhost:8080"
+
 var teams []t.Team = io.GetTeams()
+
 
 // Teams page HTML
 func Teams(w http.ResponseWriter, r *http.Request){
@@ -44,6 +47,7 @@ func Teams(w http.ResponseWriter, r *http.Request){
 	}
 
 	// Set additional values before filling template
+	params.ServerURL = serverUrl
 
 	// Parse the teams html file
 	tmpl := template.Must(template.ParseFiles("web/html/teams/index.html"))
@@ -51,7 +55,9 @@ func Teams(w http.ResponseWriter, r *http.Request){
 	// Write and fill in template
 	err = tmpl.Execute(w, params)
 
-	fmt.Println(err)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 // Search teams JSON
@@ -73,9 +79,18 @@ func SearchTeams(w http.ResponseWriter, r *http.Request){
 
 	search := query["search"][0]
 
+	var match bool
+
 	// Substring match to get searched teams
 	for i := range len(teams) {
-		if strings.Contains(strings.ToLower(teams[i].School), strings.ToLower(search)) {
+		// Match the search to either the school or one of the alt names
+		match = (strings.HasPrefix(strings.ToLower(teams[i].School), strings.ToLower(search)) || 
+			strings.HasPrefix(strings.ToLower(teams[i].AltName1), strings.ToLower(search)) ||
+			strings.HasPrefix(strings.ToLower(teams[i].AltName2), strings.ToLower(search)) ||
+			strings.HasPrefix(strings.ToLower(teams[i].AltName2), strings.ToLower(search)))
+
+		// If search match, add to response
+		if match {
 			res.Teams = append(res.Teams, t.SMTeam{ Id: teams[i].Id, School: teams[i].School })
 		}
 	}
@@ -83,5 +98,7 @@ func SearchTeams(w http.ResponseWriter, r *http.Request){
 	// Write json 
 	err := json.NewEncoder(w).Encode(res)
 
-	fmt.Println(err)
+	if err != nil {
+		fmt.Println(err)
+	}
 }

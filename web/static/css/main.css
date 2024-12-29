@@ -24,6 +24,12 @@ body {
   background: var(--light-grey);
 }
 
+a,
+a :visited {
+  color: inherit;
+  text-decoration: none;
+}
+
 nav {
   display: flex;
   align-items: center;
@@ -41,12 +47,45 @@ nav input {
   font-size: 1.8rem;
   padding: 0.5rem;
   border: 1px solid var(--grey);
+  width: 24rem;
+  font-weight: 400;
 }
 
 nav input:active,
 nav input:focus {
   outline: none;
   border: 1px solid var(--white);
+}
+
+#search-team-list {
+  position: absolute;
+  right: 0;
+  top: var(--nav-height);
+  background: var(--dark-grey);
+  font-size: 1.6rem;
+  font-weight: 500;
+  list-style: none;
+  border-bottom-left-radius: 7px;
+  width: 25rem;
+}
+
+#search-team-list :last-child {
+  border-bottom-left-radius: 7px;
+}
+
+#search-team-list li {
+  width: 100%;
+  cursor: pointer;
+}
+
+#search-team-list li:hover {
+  background: var(--grey);
+}
+
+#search-team-list li a {
+  display: inline-block;
+  width: 100%;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
 }
 
 .logo {
@@ -98,9 +137,4 @@ nav input:focus {
 .section-teams .faq {
   font-size: 2.4rem;
   font-weight: 500;
-}
-
-.section-teams a,
-.section-teams a:visited {
-  color: inherit;
 }
