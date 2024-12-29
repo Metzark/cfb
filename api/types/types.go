@@ -1,9 +1,11 @@
 package types
 
+// Mainly just for reading in teams.json right now
 type Teams struct {
 	Teams []Team `json:"teams"`
 }
 
+// Base Team struct, based on Team in api.collegefootballdata.com
 type Team struct {
 	Id int `json:"id"`
 	School string `json:"school"`
@@ -17,6 +19,7 @@ type Team struct {
 	Location Location `json:"location"`
 }
 
+// Base Location struct, based on Location in api.collegefootballdata.com
 type Location struct {
 	Id int `json:"venue_id"`
 	Name string `json:"name"`
@@ -32,4 +35,22 @@ type Location struct {
 	YearConstructed int `json:"year_constructed"`
 	Grass bool `json:"grass"`
 	Dome bool `json:"dome"`
+}
+
+// Small version of Team, just id and name right now
+type SMTeam struct {
+	Id int `json:"id"`
+	School string `json:"school"`
+}
+
+// For Teams HTML template
+type TeamsTMPLParams struct {
+	Team *Team `json:"team"`
+	SearchTeamsURL string `json:"searchTeamsURL"`
+}
+
+// Response struct for /search-teams route
+type SearchTeamsResponse struct {
+	Teams []SMTeam `json:"teams"`
+	Error string `json:"error"`
 }

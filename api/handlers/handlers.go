@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -12,9 +14,9 @@ import (
 
 var teams []t.Team = io.GetTeams()
 
-
+// Teams page HTML
 func Teams(w http.ResponseWriter, r *http.Request){
-	var team *t.Team
+	var params t.TeamsTMPLParams
 
 	// Split the url path
 	parts := strings.Split(r.URL.Path, "/teams/")
@@ -37,10 +39,49 @@ func Teams(w http.ResponseWriter, r *http.Request){
 	// Match team ids
 	for i := range len(teams) {
 		if id == teams[i].Id {
-			team = &teams[i]
+			params.Team = &teams[i]
 		}
 	}
 
+	// Set additional values before filling template
+
+	// Parse the teams html file
 	tmpl := template.Must(template.ParseFiles("web/html/teams/index.html"))
-	tmpl.Execute(w, team)
+
+	// Write and fill in template
+	err = tmpl.Execute(w, params)
+
+	fmt.Println(err)
+}
+
+// Search teams JSON
+func SearchTeams(w http.ResponseWriter, r *http.Request){
+	var res t.SearchTeamsResponse
+
+	// Set response content type for json
+	w.Header().Set("Content-Type", "application/json")
+
+	// Get request query
+	query := r.URL.Query()
+
+	// Should only be 1 value for search
+	if len(query["search"]) != 1 {
+		res.Error = "The search query must have 1 value..."
+		json.NewEncoder(w).Encode(res)
+		return
+	}
+
+	search := query["search"][0]
+
+	// Substring match to get searched teams
+	for i := range len(teams) {
+		if strings.Contains(strings.ToLower(teams[i].School), strings.ToLower(search)) {
+			res.Teams = append(res.Teams, t.SMTeam{ Id: teams[i].Id, School: teams[i].School })
+		}
+	}
+
+	// Write json 
+	err := json.NewEncoder(w).Encode(res)
+
+	fmt.Println(err)
 }

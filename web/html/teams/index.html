@@ -15,34 +15,35 @@
   <body>
     <nav>
       <span class="logo">CFB - Teams</span>
+      <input id="search-team-input" placeholder="Search Teams" />
     </nav>
     <main class="main-teams">
-      <section class="section-teams" style="background: {{.Color}};">
-        <h1 style="color: {{.AltColor}};">{{.School}}</h1>
+      <section class="section-teams" style="background: {{.Team.Color}};">
+        <h1 style="color: {{.Team.AltColor}};">{{.Team.School}}</h1>
         <div class="img-wrap">
-          <img src="{{index .Logos 0}}" alt="{{.School}} Logo" />
+          <img src="{{index .Team.Logos 0}}" alt="{{.Team.School}} Logo" />
         </div>
         <div class="faq">
           <h2>Team</h2>
-          <p>Mascot: <span style="color: {{.AltColor}};">{{.Mascot}}</span></p>
-          <p>Conference: <span style="color: {{.AltColor}};">{{.Conference}}</span></p>
-          <p>Location: <span style="color: {{.AltColor}};">{{.Location.City}}, {{.Location.State}}</span></p>
+          <p>Mascot: <span style="color: {{.Team.AltColor}};">{{.Team.Mascot}}</span></p>
+          <p>Conference: <span style="color: {{.Team.AltColor}};">{{.Team.Conference}}</span></p>
+          <p>Location: <span style="color: {{.Team.AltColor}};">{{.Team.Location.City}}, {{.Team.Location.State}}</span></p>
         </div>
         <div class="faq">
           <h2>Stadium 
-            <a href="http://maps.google.com/maps/@{{.Location.Lat}},{{.Location.Long}},2000m" target="_blank" >
+            <a title="View on map" href="http://maps.google.com/maps/@{{.Team.Location.Lat}},{{.Team.Location.Long}},2000m" target="_blank" >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height="0.7em" fill="currentColor"">
                 <path d="M352 0c-12.9 0-24.6 7.8-29.6 19.8s-2.2 25.7 6.9 34.9L370.7 96 201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L416 141.3l41.4 41.4c9.2 9.2 22.9 11.9 34.9 6.9s19.8-16.6 19.8-29.6l0-128c0-17.7-14.3-32-32-32L352 0zM80 32C35.8 32 0 67.8 0 112L0 432c0 44.2 35.8 80 80 80l320 0c44.2 0 80-35.8 80-80l0-112c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 112c0 8.8-7.2 16-16 16L80 448c-8.8 0-16-7.2-16-16l0-320c0-8.8 7.2-16 16-16l112 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L80 32z"/>
               </svg>
             </a>
           </h2>
-          <p>Name: <span style="color: {{.AltColor}};">{{.Location.Name}}</span></p>
-          <p>Capacity: <span style="color: {{.AltColor}};">{{.Location.Capacity}}</span></p>
-          <p>Elevation: <span style="color: {{.AltColor}};">{{.Location.Elevation}}</span></p>
-          <p>Constructed In: <span style="color: {{.AltColor}};">{{.Location.YearConstructed}}</span></p>
+          <p>Name: <span style="color: {{.Team.AltColor}};">{{.Team.Location.Name}}</span></p>
+          <p>Capacity: <span style="color: {{.Team.AltColor}};">{{.Team.Location.Capacity}}</span></p>
+          <p>Elevation: <span style="color: {{.Team.AltColor}};">{{.Team.Location.Elevation}}</span></p>
+          <p>Constructed In: <span style="color: {{.Team.AltColor}};">{{.Team.Location.YearConstructed}}</span></p>
           <p>Field Type: 
-            <span style="color: {{.AltColor}};"> 
-              {{if .Location.Grass}}
+            <span style="color: {{.Team.AltColor}};"> 
+              {{if .Team.Location.Grass}}
               Grass
               {{else}}
               Turf
@@ -53,5 +54,25 @@
       </section>
       <section></section>
     </main>
+    <script>
+      let search = "";
+      let searching = false;
+
+      function setSearchTeams(e){
+        search = e.target.value;
+
+        // URI encode the search (for spaces)
+        const encodedSearch = encodeURI(search)
+
+        if (!searching) {
+          setTimeout(async () => {
+            const res = await fetch("");
+            const json = await res.json();
+            console.log(json);
+          }, 500);
+        }
+      }
+      document.getElementById("search-team-input").addEventListener("input", searchTeams);
+    </script>
   </body>
 </html>

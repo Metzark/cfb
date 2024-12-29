@@ -11,9 +11,14 @@ import (
 
 func main(){
 
+    // CSS
     fs := http.FileServer(http.Dir("web/static"))
     http.Handle("GET /static/", http.StripPrefix("/static/", fs))
 
+    // JSON
+    http.HandleFunc("GET /search-teams", handle.SearchTeams)
+
+    // HTML
     http.HandleFunc("GET /teams/", handle.Teams)
 
     fmt.Println("Running on 8080")
