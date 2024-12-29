@@ -31,6 +31,10 @@ a :visited {
   text-decoration: none;
 }
 
+.hidden {
+  display: none;
+}
+
 /* nav */
 nav {
   display: flex;

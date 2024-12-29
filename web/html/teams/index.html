@@ -60,6 +60,7 @@
       // Element vars
       const searchTeamList = document.getElementById("search-team-list");
       const searchTeamInput = document.getElementById("search-team-input");
+      const nav = document.querySelector("nav");
 
       // State vars
       let search = "";
@@ -112,7 +113,31 @@
         }
       }
       
+      // Adds hidden class to list to hide it
+      function hideSearchTeamsList(){
+        setTimeout(() => {
+          if (!nav.contains(document.activeElement)) {
+            searchTeamList.classList.add("hidden");
+          }
+        }, 50);
+      }
+
+      // Remove hidden class from list to show it
+      function showSearchTeamsList(){
+        searchTeamList.classList.remove("hidden")
+      }
+
+      // Search input changes
       searchTeamInput.addEventListener("input", searchTeams);
+
+      // Search input is focused
+      searchTeamInput.addEventListener("focus", showSearchTeamsList);
+      
+      // Search input is unfocused
+      searchTeamInput.addEventListener("blur", hideSearchTeamsList);
+
+      // Search list is unfocused (li's of list are unfocused)
+      searchTeamList.addEventListener("focusout", hideSearchTeamsList);
     </script>
   </body>
 </html>
