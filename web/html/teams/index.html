@@ -78,7 +78,7 @@
         }
 
         // URI encode the search (for spaces)
-        const encodedSearch = encodeURI(search)
+        const encodedSearch = encodeURIComponent(search)
 
         // Only set new search if not already search (http request has already been sent)
         if (!searching) {

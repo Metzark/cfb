@@ -20,8 +20,11 @@
   cursor: pointer;
 }
 
-#search-team-list li:hover {
+#search-team-list li:hover,
+#search-team-list li :focus,
+#search-team-list li :active {
   background: var(--grey);
+  outline: none;
 }
 
 #search-team-list li a {
