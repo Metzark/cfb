@@ -1,62 +1,4 @@
-:root {
-  font-size: 62.5%;
-
-  /* Colors */
-  --white: #eeeeee;
-  --dark-grey: #3c3c42;
-  --grey: #4a4a52;
-  --light-grey: #d3d3d3;
-
-  /* Sizes */
-  --nav-height: 5.4rem;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: "Ubuntu";
-  height: 100vh;
-  width: 100vw;
-  background: var(--light-grey);
-}
-
-a,
-a :visited {
-  color: inherit;
-  text-decoration: none;
-}
-
-nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: var(--nav-height);
-  background: var(--dark-grey);
-  color: var(--white);
-  padding: 0.5rem 1rem;
-}
-
-nav input {
-  background: var(--grey);
-  color: var(--white);
-  border-radius: 5px;
-  font-size: 1.8rem;
-  padding: 0.5rem;
-  border: 1px solid var(--grey);
-  width: 24rem;
-  font-weight: 400;
-}
-
-nav input:active,
-nav input:focus {
-  outline: none;
-  border: 1px solid var(--white);
-}
-
+/* nav  */
 #search-team-list {
   position: absolute;
   right: 0;
@@ -88,11 +30,7 @@ nav input:focus {
   padding: 0.5rem 0.5rem 0.5rem 0.5rem;
 }
 
-.logo {
-  font-size: 3.2rem;
-  font-weight: 600;
-}
-
+/* main */
 .main-teams {
   display: grid;
   grid-template-columns: max-content 1fr;
