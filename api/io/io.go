@@ -3,61 +3,40 @@ package io
 import (
 	"encoding/json"
 	"io"
+	"log"
 	"os"
+
+	t "github.com/Metzark/cfb/api/types"
 )
 
-type Team struct {
-	Id int32 `json:"id"`
-	School string `json:"school"`
-	Mascot string `json:"mascot"`
-	Abbreviation string `json:"abbreviation"`
-	Conference string `json:"conference"`
-	Color string `json:"color"`
-	AltColor string `json:"alt_color"`
-	Logos []string `json:"logos"`
-	Twitter string `json:"twitter"`
-	Location location `json:"location"`
-}
-
-type location struct {
-	Id int32 `json:"venue_id"`
-	Name string `json:"name"`
-	City string `json:"city"`
-	State string `json:"state"`
-	Zip string `json:"zip"`
-	Country string `json:"country_code"`
-	Timezone string `json:"timezone"`
-	Lat float64 `json:"latitude"`
-	Long float64 `json:"longitude"`
-	Elevation float64 `json:"elevation"`
-	Capacity int32 `json:"capactiy"`
-	YearConstructed int32 `json:"year_constructed"`
-	Grass bool `json:"grass"`
-	Dome bool `json:"dome"`
-}
-
-func getTeams() (*[]Team, error) {
+// Get the teams from data/teams.json
+// WILL FATAL IF data/teams.json CANT BE READ IN!
+func GetTeams() []t.Team {
 	// Open teams.json file
 	file, err := os.Open("data/teams.json")
 
 	if err != nil {
-		return nil, err
+		log.Fatal("Failed to open teams.json file...\n", err)
 	}
 	
 	// Read from teams.json file
 	teamsBytes, err := io.ReadAll(file)
 
 	if err != nil {
-		return nil, err
+		log.Fatal("Failed to read teams.json file...\n", err)
 	}
 
 	// Close the teams.json file
 	file.Close()
 
-	var teams []Team
+	var teams t.Teams
 
 	// Move data into the teams array
-	json.Unmarshal(teamsBytes, &teams)
+	err = json.Unmarshal(teamsBytes, &teams)
 
-	return &teams, nil
+	if err != nil {
+		log.Fatal("Failed to unmarshall teams.json file...\n", err)
+	}
+
+	return teams.Teams
 }
