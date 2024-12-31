@@ -52,6 +52,9 @@ func Teams(w http.ResponseWriter, r *http.Request){
 	// Parse the teams html file
 	tmpl := template.Must(template.ParseFiles("web/html/teams/index.html"))
 
+	// Set content type for html
+	w.Header().Set("Content-Type", "text/html")
+
 	// Write and fill in template
 	err = tmpl.Execute(w, params)
 
