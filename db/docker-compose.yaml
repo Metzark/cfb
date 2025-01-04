@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: cfb_pg
+    environment:
+      POSTGRES_PASSWORD: superinsanepassword
+      POSTGRES_DB: cfb
+    ports:
+      - "5432:5432"
+    restart: always
