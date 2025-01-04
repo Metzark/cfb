@@ -1,16 +1,6 @@
-import psycopg2
-from dotenv import dotenv_values
+from functions.create_pg_conn import create_pg_conn
+from functions.execute_stmt import execute_stmt
 
-# Load environment variables
-config = dotenv_values("scripts/.env")
-
-conn_params = {
-    "dbname": config["CFB_DB_NAME"],
-    "user": config["CFB_DB_USER"],
-    "password": config["CFB_DB_PASSWORD"],
-    "host": config["CFB_DB_HOST"],
-    "port": int(config["CFB_DB_PORT"])
-}
 #region SQL Statements 
 
 drop_cfb_schema_stmt = "DROP SCHEMA IF EXISTS cfb;"
@@ -27,15 +17,9 @@ drop_stats_table_stmt = "DROP TABLE IF EXISTS cfb.stats;"
 
 #endregion
 
-def execute_stmt(cur, conn, stmt):
-    # Both of these throw exceptions, let main except catch them
-    cur.execute(stmt)
-    conn.commit()
-
 try:
      # Set up db connection
-    conn = psycopg2.connect(**conn_params)
-    cur = conn.cursor()
+    conn, cur = create_pg_conn()
 
     # Drop cfb.stats table
     execute_stmt(cur, conn, drop_stats_table_stmt)
