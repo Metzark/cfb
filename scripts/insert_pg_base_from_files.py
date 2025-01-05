@@ -17,7 +17,7 @@ insert_pg_conferences = """
 """
 
 insert_pg_teams = """
-    INSERT INTO cfb.teams (id, school, mascot, abbreviation, alt_name1, alt_name2, alt_name3, color, alt_color, twitter, logo, conference_id, home_venue_id)
+    INSERT INTO cfb.teams (id, school, mascot, abbreviation, alt_name1, alt_name2, alt_name3, classification, color, alt_color, twitter, logo, conference_id, home_venue_id)
     VALUES %s
     ON CONFLICT (id) DO NOTHING;
 """
@@ -108,6 +108,7 @@ try:
             team["alt_name1"],
             team["alt_name2"],
             team["alt_name3"],
+            team["classification"],
             team["color"],
             team["alt_color"],
             team["twitter"],
@@ -172,4 +173,4 @@ try:
     cur.close()
 
 except Exception as e:
-    print(e.s)
+    print(e)

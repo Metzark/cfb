@@ -42,6 +42,7 @@ create_teams_table_stmt = """
         alt_name1 TEXT,
         alt_name2 TEXT,
         alt_name3 TEXT,
+        classification TEXT,
         color TEXT,
         alt_color TEXT,
         twitter TEXT,

@@ -1,0 +1,81 @@
+{
+  "conferences": [
+    {
+      "id": 1,
+      "name": "ACC",
+      "short_name": "Atlantic Coast Conference",
+      "abbreviation": "ACC",
+      "classification": "fbs"
+    },
+    {
+      "id": 4,
+      "name": "Big 12",
+      "short_name": "Big 12 Conference",
+      "abbreviation": "B12",
+      "classification": "fbs"
+    },
+    {
+      "id": 5,
+      "name": "Big Ten",
+      "short_name": "Big Ten Conference",
+      "abbreviation": "B1G",
+      "classification": "fbs"
+    },
+    {
+      "id": 8,
+      "name": "SEC",
+      "short_name": "Southeastern Conference",
+      "abbreviation": "SEC",
+      "classification": "fbs"
+    },
+    {
+      "id": 9,
+      "name": "Pac-12",
+      "short_name": "Pac-12 Conference",
+      "abbreviation": "PAC",
+      "classification": "fbs"
+    },
+    {
+      "id": 12,
+      "name": "Conference USA",
+      "short_name": "Conference USA",
+      "abbreviation": "CUSA",
+      "classification": "fbs"
+    },
+    {
+      "id": 15,
+      "name": "Mid-American",
+      "short_name": "Mid-American Conference",
+      "abbreviation": "MAC",
+      "classification": "fbs"
+    },
+    {
+      "id": 17,
+      "name": "Mountain West",
+      "short_name": "Mountain West Conference",
+      "abbreviation": "MWC",
+      "classification": "fbs"
+    },
+    {
+      "id": 18,
+      "name": "FBS Independents",
+      "short_name": "FBS Independents",
+      "abbreviation": "Ind",
+      "classification": "fbs"
+    },
+    {
+      "id": 37,
+      "name": "Sun Belt",
+      "short_name": "Sun Belt Conference",
+      "abbreviation": "SBC",
+      "classification": "fbs"
+    },
+    {
+      "id": 151,
+      "name": "American Athletic",
+      "short_name": "American Athletic Conference",
+      "abbreviation": "AAC",
+      "classification": "fbs"
+    }
+  ]
+}
