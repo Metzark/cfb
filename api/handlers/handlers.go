@@ -63,6 +63,22 @@ func Teams(w http.ResponseWriter, r *http.Request){
 	}
 }
 
+// Predict page HTML
+func Predict(w http.ResponseWriter, r *http.Request){
+	// Parse the predict html file
+	tmpl := template.Must(template.ParseFiles("web/html/predict/index.html"))
+
+	// Set content type for html
+	w.Header().Set("Content-Type", "text/html")
+
+	// Write and fill in template
+	err := tmpl.Execute(w, nil)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+
 // Search teams JSON
 func SearchTeams(w http.ResponseWriter, r *http.Request){
 	var res t.SearchTeamsResponse

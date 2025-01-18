@@ -1,0 +1,95 @@
+/* global */
+:root {
+  font-size: 62.5%;
+
+  /* Colors */
+  --dark_dracula_orchid: #23292b;
+  --dracula_orchid: #2d3436;
+  --america_river: #636e72;
+  --soothing_breeze: #b2bec3;
+  --city_lights: #dfe6e9;
+  --prunus_avium: #e84393;
+  --pico_8: #fd79a8;
+  --exodus_fruit: #6c5ce7;
+  --shy_moment: #a29bfe;
+  --chi_gong: #d63031;
+  --pink_glamour: #ff7675;
+  --electron_blue: #0984e3;
+  --green_darner_tailL: #74b9ff;
+  --orangeville: #e17055;
+  --first_date: #fab1a0;
+  --robins_egg_blue: #00cec9;
+  --faded_poster: #81ecec;
+  --bright_yarrow: #fdcb6e;
+  --sour_lemon: #ffeaa7;
+  --mint_leaf: #00b894;
+  --light_greenish_blue: #55efc4;
+
+  /* Sizes */
+  --nav-height: 5.4rem;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Ubuntu";
+  height: 100vh;
+  width: 100vw;
+  background: var(--america_river);
+}
+
+a,
+a :visited {
+  color: inherit;
+  text-decoration: none;
+}
+
+.hidden {
+  display: none;
+}
+
+/* nav */
+nav {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--nav-height);
+  background: var(--dracula_orchid);
+  color: var(--city_lights);
+  padding: 0.5rem 1rem;
+  box-shadow: 0rem 0rem 0.7rem 0rem var(--dark_dracula_orchid);
+  z-index: 1;
+}
+
+nav input {
+  background: var(--grey);
+  color: var(--city_lights);
+  border-radius: 5px;
+  font-size: 1.8rem;
+  padding: 0.5rem;
+  border: 1px solid var(--america_river);
+  width: 24rem;
+  font-weight: 400;
+  box-shadow: 0.3rem 0.3rem 0.7rem 0rem var(--dark_dracula_orchid);
+}
+
+nav input:active,
+nav input:focus {
+  outline: none;
+  border: 1px solid var(--mint_leaf);
+}
+
+.logo {
+  font-size: 3.2rem;
+  font-weight: 600;
+  color: var(--mint_leaf);
+}
+
+main {
+  position: relative;
+}

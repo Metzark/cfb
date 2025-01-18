@@ -1,0 +1,81 @@
+/* nav  */
+#search-team-list {
+  position: absolute;
+  right: 0;
+  top: var(--nav-height);
+  background: var(--dracula_orchid);
+  font-size: 1.6rem;
+  font-weight: 500;
+  list-style: none;
+  border-bottom-left-radius: 7px;
+  width: 25rem;
+}
+
+#search-team-list :last-child {
+  border-bottom-left-radius: 7px;
+}
+
+#search-team-list li {
+  width: 100%;
+  cursor: pointer;
+}
+
+#search-team-list li:hover,
+#search-team-list li :focus,
+#search-team-list li :active {
+  color: var(--mint_leaf);
+  outline: none;
+}
+
+#search-team-list li a {
+  display: inline-block;
+  width: 100%;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+
+/* main */
+.main-teams {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  height: calc(100vh - var(--nav-height));
+}
+
+.section-teams {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  color: var(--city_lights);
+  padding: 1.5rem 2rem;
+}
+
+.section-teams h1 {
+  font-size: 4rem;
+  font-weight: 600;
+  width: 100%;
+  text-align: center;
+}
+
+.section-teams img {
+  width: 20rem;
+  background: var(--city_lights);
+  border-radius: 7px;
+  margin: 1rem 3rem;
+}
+
+.section-teams .img-wrap {
+  text-align: center;
+  width: 100%;
+}
+
+.section-teams h2 {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 3rem;
+  font-weight: 500;
+}
+
+.section-teams .faq {
+  font-size: 2.4rem;
+  font-weight: 500;
+}

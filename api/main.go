@@ -20,6 +20,7 @@ func main(){
 
     // HTML
     http.HandleFunc("GET /teams/", handle.Teams)
+    http.HandleFunc("GET /predict", handle.Predict)
 
     fmt.Println("Running on 8080")
     log.Fatal(http.ListenAndServe(":8080", nil))
