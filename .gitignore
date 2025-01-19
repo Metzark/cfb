@@ -1,3 +1,7 @@
 db/scripts/.env
+<<<<<<< HEAD
 .env
+=======
+api/.env
+>>>>>>> 4120ced (Set up postgres client)
 **__pycache__
