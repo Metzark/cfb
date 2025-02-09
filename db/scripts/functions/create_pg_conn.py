@@ -4,7 +4,7 @@ from dotenv import dotenv_values
 # Create pg connection and cursor (using environment variables)
 def create_pg_conn():
     # Load environment variables
-    config = dotenv_values("db/scripts/.env")
+    config = dotenv_values(".env")
 
     conn_params = {
         "dbname": config["CFB_DB_NAME"],

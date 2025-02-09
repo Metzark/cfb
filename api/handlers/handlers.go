@@ -8,18 +8,27 @@ import (
 	"strings"
 	"text/template"
 
-	io "github.com/Metzark/cfb/api/io"
-	t "github.com/Metzark/cfb/api/types"
+	pg "github.com/Metzark/cfb/api/pg"
 )
 
 var serverUrl string  = "http://localhost:8080"
 
-var teams []t.Team = io.GetTeams()
+// For Teams HTML template
+type TeamsTMPLParams struct {
+	Team *pg.Team `json:"team"`
+	ServerURL string `json:"serverURL"`
+}
 
+
+// Response struct for /search-teams route
+type SearchTeamsResponse struct {
+	Teams []pg.SMTeam `json:"teams"`
+	Error string `json:"error"`
+}
 
 // Teams page HTML
-func Teams(w http.ResponseWriter, r *http.Request){
-	var params t.TeamsTMPLParams
+func Teams(w http.ResponseWriter, r *http.Request, pgc *pg.PGC){
+	var params TeamsTMPLParams
 
 	// Split the url path
 	parts := strings.Split(r.URL.Path, "/teams/")
@@ -39,13 +48,13 @@ func Teams(w http.ResponseWriter, r *http.Request){
 		return
 	}
 
-	// Match team ids
-	for i := range len(teams) {
-		if id == teams[i].Id {
-			params.Team = &teams[i]
-		}
-	}
+	// Query team from postgres
+	params.Team, err = pg.GetTeamById(pgc, id)
 
+	if err != nil {
+		fmt.Println(err)
+	}
+	
 	// Set additional values before filling template
 	params.ServerURL = serverUrl
 
@@ -80,8 +89,9 @@ func Predict(w http.ResponseWriter, r *http.Request){
 }
 
 // Search teams JSON
-func SearchTeams(w http.ResponseWriter, r *http.Request){
-	var res t.SearchTeamsResponse
+func SearchTeams(w http.ResponseWriter, r *http.Request, pgc *pg.PGC){
+	var res SearchTeamsResponse
+	var err error
 
 	// Set response content type for json
 	w.Header().Set("Content-Type", "application/json")
@@ -89,7 +99,7 @@ func SearchTeams(w http.ResponseWriter, r *http.Request){
 	// Get request query
 	query := r.URL.Query()
 
-	// Should only be 1 value for search
+	// // Should only be 1 value for search
 	if len(query["search"]) != 1 {
 		res.Error = "The search query must have 1 value..."
 		json.NewEncoder(w).Encode(res)
@@ -98,24 +108,16 @@ func SearchTeams(w http.ResponseWriter, r *http.Request){
 
 	search := query["search"][0]
 
-	var match bool
+	
+	res.Teams, err = pg.SearchTeamsByName(pgc, search)
 
-	// Substring match to get searched teams
-	for i := range len(teams) {
-		// Match the search to either the school or one of the alt names
-		match = (strings.HasPrefix(strings.ToLower(teams[i].School), strings.ToLower(search)) || 
-			strings.HasPrefix(strings.ToLower(teams[i].AltName1), strings.ToLower(search)) ||
-			strings.HasPrefix(strings.ToLower(teams[i].AltName2), strings.ToLower(search)) ||
-			strings.HasPrefix(strings.ToLower(teams[i].AltName2), strings.ToLower(search)))
-
-		// If search match, add to response
-		if match {
-			res.Teams = append(res.Teams, t.SMTeam{ Id: teams[i].Id, School: teams[i].School })
-		}
+	if err != nil {
+		fmt.Println(err)
+		res.Error = err.Error()
 	}
 
-	// Write json 
-	err := json.NewEncoder(w).Encode(res)
+	// // Write json using writer (this sends a response)
+	err = json.NewEncoder(w).Encode(res)
 
 	if err != nil {
 		fmt.Println(err)
