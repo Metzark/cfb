@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -92,11 +93,11 @@ func SearchTeams(w http.ResponseWriter, r *http.Request, pgc *pg.PGC){
 	var res SearchTeamsResponse
 	var err error
 
-	// // Set response content type for json
-	// w.Header().Set("Content-Type", "application/json")
+	// Set response content type for json
+	w.Header().Set("Content-Type", "application/json")
 
-	// // Get request query
-	// query := r.URL.Query()
+	// Get request query
+	query := r.URL.Query()
 
 	// // Should only be 1 value for search
 	if len(query["search"]) != 1 {
@@ -105,7 +106,7 @@ func SearchTeams(w http.ResponseWriter, r *http.Request, pgc *pg.PGC){
 		return
 	}
 
-	// search := query["search"][0]
+	search := query["search"][0]
 
 	
 	res.Teams, err = pg.SearchTeamsByName(pgc, search)
@@ -118,7 +119,13 @@ func SearchTeams(w http.ResponseWriter, r *http.Request, pgc *pg.PGC){
 	// // Write json using writer (this sends a response)
 	err = json.NewEncoder(w).Encode(res)
 
+<<<<<<< HEAD
 	// if err != nil {
 	// 	fmt.Println(err)
 	// }
+=======
+	if err != nil {
+		fmt.Println(err)
+	}
+>>>>>>> 5fc5e57 (Update search teams to pull from postgres)
 }
