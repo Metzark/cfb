@@ -1,0 +1,130 @@
+.logo {
+  color: var(--bright_yarrow);
+}
+
+/* main */
+.main-query {
+  display: grid;
+  grid-template-columns: 1fr max-content;
+  height: calc(100vh - var(--nav-height));
+}
+
+.schema {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 1rem 2rem;
+}
+
+.schema h2 {
+  font-size: 1.8rem;
+}
+
+.schema pre {
+  font-size: 1.2rem;
+  overflow: hidden;
+  height: 100%;
+  /* transition: height 0.3s; */
+}
+
+.schema .schema-table {
+  cursor: pointer;
+}
+
+.schema .schema-table h3 {
+  font-size: 1.4rem;
+}
+
+.schema pre.hide-schema {
+  height: 0;
+}
+
+.query {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 3rem;
+  width: 100%;
+  overflow: auto;
+}
+
+.query-options {
+  display: flex;
+  gap: 1rem;
+}
+
+.query-options button,
+.submit-options button {
+  padding: 0.5rem 1rem;
+  font-size: 2rem;
+  font-weight: 500;
+  background: var(--dracula_orchid);
+  color: var(--soothing_breeze);
+  border: 1px solid var(--dracula_orchid);
+  border-radius: 3px;
+  font-family: inherit;
+  transition: 0.2s all;
+  cursor: pointer;
+  outline: none;
+}
+
+.query-options button.selected {
+  border: 1px solid var(--bright_yarrow);
+  color: var(--bright_yarrow);
+}
+
+.query-options button:hover:not(.selected),
+.query-options button:focus:not(.selected),
+.submit-options button:hover:not(.selected),
+.submit-options button:focus:not(.selected) {
+  border: 1px solid var(--soothing_breeze);
+}
+
+.query-option-description {
+  font-size: 2rem;
+}
+
+.query-textarea textarea {
+  resize: none;
+  width: 100%;
+  height: 10rem;
+  background-color: var(--soothing_breeze);
+  font-family: inherit;
+  outline: none;
+  border-radius: 3px;
+  padding: 0.2rem;
+}
+
+.submit-options {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.query-table-wrap {
+  width: 100%;
+  overflow: auto;
+}
+
+#query-table {
+  display: block;
+  border-collapse: collapse;
+  font-size: 1.4rem;
+}
+
+#query-table tbody {
+  width: 100%;
+}
+
+#query-table th {
+  background: var(--dracula_orchid);
+  color: var(--bright_yarrow);
+  border: 1px solid var(--bright_yarrow);
+  padding: 0.4rem 1rem;
+}
+
+#query-table td {
+  border: 1px solid var(--dracula_orchid);
+  padding: 0.2rem 1rem;
+}

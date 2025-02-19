@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CFB - Query</title>
+    <link href="/static/css/global/styles.css" rel="stylesheet" />
+    <link href="/static/css/query/styles.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav>
+      <span class="logo">CFB - Query</span>
+    </nav>
+    <main class="main-query">
+      <div class="query">
+        <div class="query-options">
+          <button id="query-option-sql" class="selected">SQL</button>
+          <button id="query-option-chatgpt" disabled>ChatGPT</button>
+        </div>
+        <div class="query-option-description">
+          <p id="query-option-description">Run PostgresSQL queries on the CFB database</p>
+        </div>
+        <div class="query-textarea">
+          <textarea id="query-textarea">SELECT school, mascot FROM cfb.teams LIMIT 5;</textarea>
+        </div>
+        <div class="submit-options">
+          <button id="run-query">Run Query</button>
+        </div>
+        <div class="query-table-wrap">
+          <table id="query-table"></table>
+        </div>
+      </div>
+      <div class="schema">
+        <h2>CFB Database Schema</h2>
+        <div class="schema-table" id="cfb.venues">
+          <h3>cfb.venues</h3>
+          <pre class="hide-schema"><code>
+  id INTEGER PRIMARY KEY
+  name TEXT
+  city TEXT
+  state TEXT
+  zip TEXT
+  country_code TEXT
+  location_x DOUBLE PRECISION
+  location_y DOUBLE PRECISION
+  elevation DOUBLE PRECISION
+  year_constructed INTEGER
+  capacity INTEGER
+  dome BOOLEAN
+  grass BOOLEAN
+  timezone TEXT
+          </code></pre>
+        </div>
+        <div class="schema-table" id="cfb.conferences">
+          <h3>cfb.conferences</h3>
+          <pre class="hide-schema"><code>
+  id INTEGER PRIMARY KEY
+  name TEXT
+  short_name TEXT
+  abbreviation TEXT
+          </code></pre>
+        </div>
+        <div class="schema-table" id="cfb.teams">
+          <h3>cfb.teams</h3>
+          <pre class="hide-schema"><code>
+  id INTEGER PRIMARY KEY
+  school TEXT
+  mascot TEXT
+  abbreviation TEXT
+  alt_name1 TEXT
+  alt_name2 TEXT
+  alt_name3 TEXT
+  classification TEXT
+  color TEXT
+  alt_color TEXT
+  twitter TEXT
+  logo TEXT
+  conference_id INTEGER REFERENCES cfb.conferences(id)
+  home_venue_id INTEGER REFERENCES cfb.venues(id)
+          </code></pre>
+        </div>
+        <div class="schema-table" id="cfb.games">
+          <h3>cfb.games</h3>
+          <pre class="hide-schema"><code>
+  id BIGINT PRIMARY KEY
+  season INTEGER
+  week INTEGER
+  season_type TEXT
+  start_date TIMESTAMPTZ
+  neutral_site BOOLEAN
+  conference_game BOOLEAN
+  home_qtr1_score INTEGER
+  home_qtr2_score INTEGER
+  home_qtr3_score INTEGER
+  home_qtr4_score INTEGER
+  home_final_score INTEGER
+  away_qtr1_score INTEGER
+  away_qtr2_score INTEGER
+  away_qtr3_score INTEGER
+  away_qtr4_score INTEGER
+  away_final_score INTEGER
+  excitement_index DOUBLE PRECISION
+  venue_id INTEGER REFERENCES cfb.venues(id)
+  home_id INTEGER REFERENCES cfb.teams(id)
+  away_id INTEGER REFERENCES cfb.teams(id)
+  winner_id INTEGER REFERENCES cfb.teams(id)
+  loser_id INTEGER REFERENCES cfb.teams(id)
+          </code></pre>
+        </div>
+        <div class="schema-table" id="cfb.stats">
+          <h3>cfb.stats</h3>
+          <pre class="hide-schema"><code>
+  team_id INTEGER REFERENCES cfb.teams(id)
+  season INTEGER
+  interception_yards INTEGER
+  turnovers INTEGER
+  punt_return_yards INTEGER
+  fumbles_lost INTEGER
+  possession_time INTEGER
+  fumbles_recovered INTEGER
+  rushing_tds INTEGER
+  kick_return_yards INTEGER
+  pass_attempts INTEGER
+  interception_tds INTEGER
+  fourth_down_conversions INTEGER
+  punt_returns INTEGER
+  interceptions INTEGER
+  third_down_conversions INTEGER
+  passing_tds INTEGER
+  rushing_yards INTEGER
+  penalty_yards INTEGER
+  kick_return_tds INTEGER
+  fourth_downs INTEGER
+  penalties INTEGER
+  third_downs INTEGER
+  kick_returns INTEGER
+  total_yards INTEGER
+  passes_intercepted INTEGER
+  sacks INTEGER
+  punt_return_tds INTEGER
+  tackles_for_loss INTEGER
+  pass_completions INTEGER
+  first_downs INTEGER
+  rushing_attempts INTEGER
+  net_passing_yards INTEGER
+      
+  -- o = offensive, d = defensive
+  o_plays INTEGER
+  o_drives INTEGER
+  o_ppa DOUBLE PRECISION
+  o_total_ppa DOUBLE PRECISION
+  o_explosiveness DOUBLE PRECISION
+  o_power_success DOUBLE PRECISION
+  o_line_yards DOUBLE PRECISION
+  o_line_yards_total INTEGER
+  o_second_level_yards DOUBLE PRECISION
+  o_second_level_yards_total INTEGER
+  o_open_field_yards DOUBLE PRECISION
+  o_open_field_yards_total INTEGER
+  o_avg_field_position_start REAL
+  o_avg_field_position_predicted_points REAL
+  o_points_per_opportunity DOUBLE PRECISION
+  o_total_opportunities INTEGER
+  d_plays INTEGER
+  d_drives INTEGER
+  d_ppa DOUBLE PRECISION
+  d_total_ppa DOUBLE PRECISION
+  d_explosiveness DOUBLE PRECISION
+  d_power_success DOUBLE PRECISION
+  d_line_yards DOUBLE PRECISION
+  d_line_yards_total INTEGER
+  d_second_level_yards DOUBLE PRECISION
+  d_second_level_yards_total INTEGER
+  d_open_field_yards DOUBLE PRECISION
+  d_open_field_yards_total INTEGER
+  d_avg_field_position_start REAL
+  d_avg_field_position_predicted_points REAL
+  d_points_per_opportunity DOUBLE PRECISION
+  d_total_opportunities INTEGER
+  PRIMARY KEY (team_id, season)
+          </code></pre>
+        </div>
+      </div>
+    </main>
+    <script>
+      // Element vars
+      const queryOptions = document.querySelector(".query-options");
+      const submitOptions = document.querySelector(".submit-options");
+      const queryTextarea = document.getElementById("query-textarea");
+      const queryTable = document.getElementById("query-table");
+      const schema = document.querySelector(".schema");
+
+      // State vars
+      let queryOption = "sql";
+      let running = false;
+
+      // Set query option (sql or chatgpt)
+      function setQueryOption(e) {
+        const id = e.target.id;
+        if (id === "query-option-sql") {
+          queryOption = "sql";
+          document.getElementById("query-option-sql").classList.add("selected");
+          document.getElementById("query-option-chatgpt").classList.remove("selected");
+        }
+        if (id === "query-option-chatgpt") {
+          queryOption = "chatgpt";
+          document.getElementById("query-option-chatgpt").classList.add("selected");
+          document.getElementById("query-option-sql").classList.remove("selected");
+        }
+      }
+
+      // Toggle the columns width for the schema list
+      function toggleShowColumns(e) {
+        const div = e.target.closest("div");
+
+        // Did not click on expandable div
+        if (!div.id) return;
+
+        // Expand the preformatted element
+        const pre = div.querySelector("pre");
+        pre.classList.toggle("hide-schema");
+      }
+
+      // Run sql query (using /custom-query in API)
+      async function runQuery(e) {
+        // If run query button is clicked and not already running a query
+        if (e.target.id === "run-query" && !running) {
+          const query = queryTextarea.value;
+
+          if (!query) return;
+
+          try {
+            running = true;
+
+            // Hit /custom-query
+            const res = await fetch(`{{.ServerURL}}/custom-query`, {
+              method: "POST",
+              body: JSON.stringify({
+                query,
+              }),
+            });
+
+            const data = await res.json();
+
+            // If an error was returned from API, throw it
+            if (data.error) {
+              throw new Error(data.error);
+            }
+
+            // If no rows were returned from the query, throw error
+            if (!data.rows || data.rows.length < 1) {
+              throw new Error("No rows were returned from the query");
+            }
+
+            // Get column names using first row
+            const colNamesRow = `<tr>${Object.keys(data.rows[0])
+              .map((k) => `<th>${k}</th>`)
+              .join("")}</tr>`;
+
+            // Get each row
+            const rows = data.rows
+              .map((r) => {
+                return `<tr>${Object.values(r)
+                  .map((v) => `<td>${v}</td>`)
+                  .join("")}</tr>`;
+              })
+              .join("");
+
+            queryTable.innerHTML = `${colNamesRow}${rows}`;
+          } catch (err) {
+            console.error(err);
+          } finally {
+            running = false;
+          }
+        }
+      }
+
+      queryOptions.addEventListener("click", setQueryOption);
+      submitOptions.addEventListener("click", runQuery);
+      schema.addEventListener("click", toggleShowColumns);
+    </script>
+  </body>
+</html>

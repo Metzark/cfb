@@ -24,6 +24,12 @@ Insert base data (venues, conferences, teams, games):
 python3 db/scripts/insert_pg_base_from_files.py
 ```
 
+Insert stats data:
+
+```
+python3 db/scripts/insert_pg_stats_from_files.py
+```
+
 If tables need to be deleted (optional):
 
 ```
