@@ -15,11 +15,21 @@ drop_games_table_stmt = "DROP TABLE IF EXISTS cfb.games;"
 
 drop_stats_table_stmt = "DROP TABLE IF EXISTS cfb.stats;"
 
+drop_readonly_user_stmt = """
+REVOKE USAGE ON SCHEMA cfb FROM readonly;
+REVOKE SELECT ON ALL TABLES IN SCHEMA cfb FROM readonly;
+REVOKE CONNECT ON DATABASE cfb FROM readonly;
+DROP USER readonly ;
+"""
+
 #endregion
 
 try:
      # Set up db connection
     conn, cur = create_pg_conn()
+
+    # Drop readonly user
+    execute_stmt(cur, conn, drop_readonly_user_stmt)
 
     # Drop cfb.stats table
     execute_stmt(cur, conn, drop_stats_table_stmt)

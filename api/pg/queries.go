@@ -72,3 +72,11 @@ func SearchTeamsByName(pgc *PGC, name string) ([]SMTeam, error) {
 
 	return smTeams, nil
 }
+
+func ExecuteCustomQuery(pgc *PGC, query string) ([]map[string]interface{}, error) {
+	var rows []map[string]interface{}
+
+	rows, err := customQuery(pgc, query)
+
+	return rows, err
+}

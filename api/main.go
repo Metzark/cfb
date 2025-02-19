@@ -27,11 +27,21 @@ func main(){
         handle.SearchTeams(w, r, pgc)
     })
 
+    http.HandleFunc("POST /custom-query", func(w http.ResponseWriter, r *http.Request) {
+        handle.CustomQuery(w, r, pgc)
+    })
+
     // HTML
     http.HandleFunc("GET /teams/", func(w http.ResponseWriter, r *http.Request) {
         handle.Teams(w, r, pgc)
     })
+
     http.HandleFunc("GET /predict", handle.Predict)
+
+    http.HandleFunc("GET /query", func(w http.ResponseWriter, r *http.Request) {
+        handle.Query(w, r, pgc)
+    })
+
 
     fmt.Println("Running on 8080")
     log.Fatal(http.ListenAndServe(":8080", nil))

@@ -1,5 +1,6 @@
 from functions.create_pg_conn import create_pg_conn
 from functions.execute_stmt import execute_stmt
+from functions.get_readonly_password import get_readonly_password
 
 #region SQL Statements
 
@@ -154,11 +155,22 @@ create_stats_table_stmt = """
     );
 """
 
+create_readonly_user_stmt = """
+CREATE USER readonly WITH PASSWORD '%s';
+GRANT CONNECT ON DATABASE cfb TO readonly;
+GRANT USAGE ON SCHEMA cfb TO readonly;
+GRANT SELECT ON ALL TABLES IN SCHEMA cfb TO readonly;
+"""
+
+
 #endregion
 
 try:
      # Set up db connection
     conn, cur = create_pg_conn()
+
+    # Get 'readonly' user password
+    readonly_password = get_readonly_password()
 
     # Create cfb schema
     execute_stmt(cur, conn, create_cfb_schema_stmt)
@@ -177,6 +189,9 @@ try:
 
     # Create cfb.stats table
     execute_stmt(cur, conn, create_stats_table_stmt)
+
+    # Create readonly user for cfb schema
+    execute_stmt(cur, conn, create_readonly_user_stmt % (readonly_password))
 
     # Close db connection
     cur.close()
