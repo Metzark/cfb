@@ -16,17 +16,20 @@
   overflow-y: auto;
   overflow-x: hidden;
   padding: 1rem 2rem;
+  background: var(--dracula_orchid);
 }
 
 .schema h2 {
-  font-size: 1.8rem;
+  font-size: 2rem;
+  color: var(--bright_yarrow);
+  border-radius: 3px;
 }
 
 .schema pre {
   font-size: 1.2rem;
   overflow: hidden;
   height: 100%;
-  /* transition: height 0.3s; */
+  color: var(--soothing_breeze);
 }
 
 .schema .schema-table {
@@ -35,6 +38,7 @@
 
 .schema .schema-table h3 {
   font-size: 1.4rem;
+  color: var(--bright_yarrow);
 }
 
 .schema pre.hide-schema {
@@ -127,4 +131,11 @@
 #query-table td {
   border: 1px solid var(--dracula_orchid);
   padding: 0.2rem 1rem;
+}
+
+@media (max-width: 53.125em) {
+  .main-query {
+    grid-template-columns: 1fr;
+    grid-template-rows: max-content 1fr;
+  }
 }

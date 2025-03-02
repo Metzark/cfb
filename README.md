@@ -9,7 +9,7 @@ CFB.
 Start up docker container running postgres:
 
 ```
-docker-compose -f db/docker-compose.yaml up -d
+docker-compose -f docker/docker-compose.yaml up -d
 ```
 
 Create necessary tables:
@@ -39,5 +39,5 @@ python3 db/scripts/delete_pg_tables.py
 Spin down docker container running postgres:
 
 ```
-docker-compose -f db/docker-compose.yaml down
+docker-compose -f docker/docker-compose.yaml down
 ```
