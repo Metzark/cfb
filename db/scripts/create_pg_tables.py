@@ -155,11 +155,36 @@ create_stats_table_stmt = """
     );
 """
 
+create_model_types_table_stmt = """
+    CREATE TABLE IF NOT EXISTS cfb.model_types (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        name TEXT,
+        data_type VARCHAR(1)
+    );
+"""
+
+create_targets_table_stmt = """
+    CREATE TABLE IF NOT EXISTS cfb.targets (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        name TEXT,
+        data_type VARCHAR(1)
+    );
+"""
+
+create_models_table_stmt = """
+    CREATE TABLE IF NOT EXISTS cfb.models (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        model_type_id UUID REFERENCES cfb.model_types(id),
+        target_id UUID REFERENCES cfb.targets(id),
+        metadata JSONB
+    );
+"""
+
 create_readonly_user_stmt = """
-CREATE USER readonly WITH PASSWORD '%s';
-GRANT CONNECT ON DATABASE cfb TO readonly;
-GRANT USAGE ON SCHEMA cfb TO readonly;
-GRANT SELECT ON ALL TABLES IN SCHEMA cfb TO readonly;
+    CREATE USER readonly WITH PASSWORD '%s';
+    GRANT CONNECT ON DATABASE cfb TO readonly;
+    GRANT USAGE ON SCHEMA cfb TO readonly;
+    GRANT SELECT ON ALL TABLES IN SCHEMA cfb TO readonly;
 """
 
 
@@ -189,6 +214,12 @@ try:
 
     # Create cfb.stats table
     execute_stmt(cur, conn, create_stats_table_stmt)
+
+    # Create cfb.model_types table
+    execute_stmt(cur, conn, create_model_types_table_stmt)
+
+    # Create cfb.models table
+    execute_stmt(cur, conn, create_models_table_stmt)
 
     # Create readonly user for cfb schema
     execute_stmt(cur, conn, create_readonly_user_stmt % (readonly_password))

@@ -7,6 +7,8 @@ WORKDIR /usr/app
 # Copy requirements file and install dependencies
 COPY ../ml/requirements.txt .
 
+COPY ../.env .
+
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Keep the container running

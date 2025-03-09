@@ -9,6 +9,8 @@ services:
     ports:
       - "5432:5432"
     restart: always
+    networks:
+      - cfb_network
   mlearning:
     build:
       context: ../
@@ -22,3 +24,11 @@ services:
       - ../ml:/usr/app:ro
     restart: always
     command: sleep infinity
+    depends_on:
+      - postgres
+    networks:
+      - cfb_network
+
+networks:
+  cfb_network:
+    driver: bridge
