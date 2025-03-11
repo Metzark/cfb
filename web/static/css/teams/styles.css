@@ -36,46 +36,67 @@
 /* main */
 .main-teams {
   display: grid;
-  grid-template-columns: max-content 1fr;
+  grid-template-columns: 10rem 1fr;
   height: calc(100vh - var(--nav-height));
 }
 
-.section-teams {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  color: var(--city_lights);
-  padding: 1.5rem 2rem;
+.side-bar {
+  background: var(--dracula_orchid);
 }
 
-.section-teams h1 {
-  font-size: 4rem;
+.side-bar .team-select {
+  background: var(--dracula_orchid);
+}
+
+.team {
+  display: grid;
+  grid-template-rows: max-content 1fr;
+}
+
+.tab-list {
+  display: flex;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.tab-list button {
+  background: none;
+  text-transform: uppercase;
+  padding: 0.4rem 1rem;
+  border-radius: 5px;
   font-weight: 600;
-  width: 100%;
-  text-align: center;
+  cursor: pointer;
+  border: 1px solid var(--dark-dracula_orchid);
+  color: var(--soothing_breeze);
 }
 
-.section-teams img {
-  width: 20rem;
-  background: var(--city_lights);
-  border-radius: 7px;
-  margin: 1rem 3rem;
+.tab-list button.active {
+  border: 1px solid var(--mint_leaf);
+  color: var(--mint_leaf);
 }
 
-.section-teams .img-wrap {
-  text-align: center;
-  width: 100%;
+.team-content {
+  display: grid;
+  grid-template-rows: max-content 1fr;
 }
 
-.section-teams h2 {
-  display: flex;
+.basic-content {
+  display: grid;
+  grid-template-columns: 10rem 1fr;
   align-items: center;
-  gap: 1rem;
-  font-size: 3rem;
-  font-weight: 500;
+  padding: 1rem;
+  color: var(--city_lights);
 }
 
-.section-teams .faq {
+.basic-content img {
+  width: 10rem;
+}
+
+.basic-content h1 {
   font-size: 2.4rem;
-  font-weight: 500;
+}
+
+.basic-content p {
+  font-size: 1.8rem;
+  font-weight: 600;
 }

@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CFB - Query</title>
+    <link href="/static/img/football.svg" rel="icon" type="image/svg+xml" />
     <link href="/static/css/global/styles.css" rel="stylesheet" />
     <link href="/static/css/query/styles.css" rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -14,23 +15,36 @@
     />
   </head>
   <body>
+    <svg style="display: none;">
+      <symbol id="carrot-up" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="var(--mint_leaf)">
+        <path d="M182.6 137.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8l256 0c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-128-128z"/>
+      </symbol>
+      <symbol id="carrot-down" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="var(--mint_leaf)">
+        <path d="M137.4 374.6c12.5 12.5 32.8 12.5 45.3 0l128-128c9.2-9.2 11.9-22.9 6.9-34.9s-16.6-19.8-29.6-19.8L32 192c-12.9 0-24.6 7.8-29.6 19.8s-2.2 25.7 6.9 34.9l128 128z"/>
+      </symbol>
+    </svg>
     <nav>
-      <span class="logo">CFB - Query</span>
+      <span class="logo">CFB</span>
+      <ul>
+        <a class="link" href="{{.ServerURL}}/">Home</a>
+        <a class="link" href="{{.ServerURL}}/teams">Teams</a>
+        <a class="link" href="{{.ServerURL}}/predict"">Predict</a>
+        <a class="link active" href="{{.ServerURL}}/query">Query</a>
+      </ul>
+      <a class="login">Login</a>
     </nav>
     <main class="main-query">
       <div class="query">
-        <div class="query-options">
-          <button id="query-option-sql" class="selected">SQL</button>
-          <button id="query-option-chatgpt" disabled>ChatGPT</button>
-        </div>
+        <ul class="tab-list query-options">
+          <button class="active">SQL</button>
+          <button>ChatGPT</button>
+        </ul>
         <div class="query-option-description">
           <p id="query-option-description">Run PostgresSQL queries on the CFB database</p>
         </div>
         <div class="query-textarea">
           <textarea id="query-textarea">SELECT school, mascot FROM cfb.teams LIMIT 5;</textarea>
-        </div>
-        <div class="submit-options">
-          <button id="run-query">Run Query</button>
+          <button>Go</button>
         </div>
         <div class="query-table-wrap">
           <table id="query-table"></table>
@@ -39,7 +53,7 @@
       <div class="schema">
         <h2>CFB Database Schema</h2>
         <div class="schema-table" id="cfb.venues">
-          <h3>cfb.venues</h3>
+          <div class="table-header"><h3>cfb.venues</h3><svg><use href="#carrot-up"/></svg></div>
           <pre class="hide-schema"><code>
   id INTEGER PRIMARY KEY
   name TEXT
@@ -58,7 +72,7 @@
           </code></pre>
         </div>
         <div class="schema-table" id="cfb.conferences">
-          <h3>cfb.conferences</h3>
+          <div class="table-header"><h3>cfb.conferences</h3><svg><use href="#carrot-up"/></svg></div>
           <pre class="hide-schema"><code>
   id INTEGER PRIMARY KEY
   name TEXT
@@ -67,7 +81,7 @@
           </code></pre>
         </div>
         <div class="schema-table" id="cfb.teams">
-          <h3>cfb.teams</h3>
+          <div class="table-header"><h3>cfb.teams</h3><svg><use href="#carrot-up"/></svg></div>
           <pre class="hide-schema"><code>
   id INTEGER PRIMARY KEY
   school TEXT
@@ -86,7 +100,7 @@
           </code></pre>
         </div>
         <div class="schema-table" id="cfb.games">
-          <h3>cfb.games</h3>
+          <div class="table-header"><h3>cfb.games</h3><svg><use href="#carrot-up"/></svg></div>
           <pre class="hide-schema"><code>
   id BIGINT PRIMARY KEY
   season INTEGER
@@ -114,7 +128,7 @@
           </code></pre>
         </div>
         <div class="schema-table" id="cfb.stats">
-          <h3>cfb.stats</h3>
+          <div class="table-header"><h3>cfb.stats</h3><svg><use href="#carrot-up"/></svg></div>
           <pre class="hide-schema"><code>
   team_id INTEGER REFERENCES cfb.teams(id)
   season INTEGER
@@ -186,12 +200,11 @@
   PRIMARY KEY (team_id, season)
           </code></pre>
         </div>
-      </div>
     </main>
     <script>
       // Element vars
       const queryOptions = document.querySelector(".query-options");
-      const submitOptions = document.querySelector(".submit-options");
+      const submitBtn = document.querySelector(".query-textarea button");
       const queryTextarea = document.getElementById("query-textarea");
       const queryTable = document.getElementById("query-table");
       const schema = document.querySelector(".schema");
@@ -217,10 +230,14 @@
 
       // Toggle the columns width for the schema list
       function toggleShowColumns(e) {
-        const div = e.target.closest("div");
+        const div = e.target.closest(".schema-table");
 
         // Did not click on expandable div
-        if (!div.id) return;
+        if (!div || !div.id) return;
+
+        const use = div.querySelector("use");
+
+        use.setAttribute("href", use.getAttribute("href") === "#carrot-up" ? "#carrot-down" : "#carrot-up");
 
         // Expand the preformatted element
         const pre = div.querySelector("pre");
@@ -230,7 +247,7 @@
       // Run sql query (using /custom-query in API)
       async function runQuery(e) {
         // If run query button is clicked and not already running a query
-        if (e.target.id === "run-query" && !running) {
+        if (!running) {
           const query = queryTextarea.value;
 
           if (!query) return;
@@ -275,6 +292,7 @@
             queryTable.innerHTML = `${colNamesRow}${rows}`;
           } catch (err) {
             console.error(err);
+            queryTable.innerHTML = `<p class="query-error">${err.message}</p>`
           } finally {
             running = false;
           }
@@ -282,7 +300,7 @@
       }
 
       queryOptions.addEventListener("click", setQueryOption);
-      submitOptions.addEventListener("click", runQuery);
+      submitBtn.addEventListener("click", runQuery);
       schema.addEventListener("click", toggleShowColumns);
     </script>
   </body>

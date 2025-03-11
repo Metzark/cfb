@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CFB - Teams</title>
+    <link href="/static/img/football.svg" rel="icon" type="image/svg+xml" />
     <link href="/static/css/global/styles.css" rel="stylesheet" />
     <link href="/static/css/teams/styles.css" rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -15,12 +16,40 @@
   </head>
   <body>
     <nav>
-      <span class="logo">CFB - Teams</span>
-      <input id="search-team-input" placeholder="Search Teams" />
-      <ul id="search-team-list"></ul>
+      <span class="logo">CFB</span>
+      <ul>
+        <a class="link" href="{{.ServerURL}}/">Home</a>
+        <a class="link active" href="{{.ServerURL}}/teams">Teams</a>
+        <a class="link" href="{{.ServerURL}}/predict"">Predict</a>
+        <a class="link" href="{{.ServerURL}}/query">Query</a>
+      </ul>
+      <a class="login">Login</a>
     </nav>
     <main class="main-teams">
-      <section class="section-teams" style="background: {{.Team.Color}};">
+      <section class="side-bar">
+        <ul class="team-select"></ul>
+      </section>
+      <section class="team">
+        <ul class="tab-list">
+          <button class="active">Team</button>
+          <button>Games</button>
+          <button>Predict</button>
+        </ul>
+        <div class="team-content">
+          <div class="basic-content">
+            <div>
+              <img src="{{.Team.Logo}}" alt="{{.Team.School}} Logo" />
+            </div>
+            <div>
+              <h1>{{.Team.School}} {{.Team.Mascot}}</h1>
+              <p>{{.Team.VenueCity}}, {{.Team.VenueState}}</p>
+              <p>{{.Team.ConferenceName}}</p>
+            </div>
+          </div>
+          <div></div>
+        </div>
+      </section>
+      <!-- <section class="section-teams" style="background: {{.Team.Color}};">
         <h1 style="color: {{.Team.AltColor}};">{{.Team.School}}</h1>
         <div class="img-wrap">
           <img src="{{.Team.Logo}}" alt="{{.Team.School}} Logo" />
@@ -54,7 +83,7 @@
           </p>
         </div>
       </section>
-      <section></section>
+      <section></section> -->
     </main>
     <script>
       // Element vars

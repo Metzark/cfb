@@ -26,7 +26,7 @@
   --light_greenish_blue: #55efc4;
 
   /* Sizes */
-  --nav-height: 5.4rem;
+  --nav-height: 6.8rem;
 }
 
 * {
@@ -39,7 +39,7 @@ body {
   font-family: "Ubuntu";
   height: 100vh;
   width: 100vw;
-  background: var(--america_river);
+  background: var(--dark_dracula_orchid);
 }
 
 a,
@@ -55,39 +55,48 @@ a :visited {
 /* nav */
 nav {
   position: relative;
-  display: flex;
+  display: grid;
+  grid-template-columns: 10rem 1fr max-content;
   align-items: center;
-  justify-content: space-between;
   height: var(--nav-height);
-  background: var(--dracula_orchid);
   color: var(--city_lights);
-  padding: 0.5rem 1rem;
-  box-shadow: 0rem 0rem 0.7rem 0rem var(--dark_dracula_orchid);
   z-index: 1;
 }
 
-nav input {
-  background: var(--grey);
-  color: var(--city_lights);
-  border-radius: 5px;
-  font-size: 1.8rem;
-  padding: 0.5rem;
-  border: 1px solid var(--america_river);
-  width: 24rem;
-  font-weight: 400;
-  box-shadow: 0.3rem 0.3rem 0.7rem 0rem var(--dark_dracula_orchid);
+nav ul {
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 0 1rem;
 }
 
-nav input:active,
-nav input:focus {
-  outline: none;
-  border: 1px solid var(--mint_leaf);
+nav ul .link.active {
+  color: var(--mint_leaf);
 }
 
-.logo {
+nav ul .link.active svg {
+  width: 10px;
+  height: 10px;
+  padding-top: 1px;
+}
+
+nav .logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 3.2rem;
   font-weight: 600;
   color: var(--mint_leaf);
+}
+
+nav .login {
+  font-size: 1.6rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 0 2rem;
 }
 
 main {

@@ -9,7 +9,7 @@ def create_pg_conn():
     conn_params = {
         "dbname": config["CFB_DB_NAME"],
         "user": config["CFB_DB_USER"],
-        "password": config["CFB_DB_READONLY_PASSWORD"],
+        "password": config["CFB_DB_PASSWORD"],
         "host": config["CFB_DB_HOST"],
         "port": int(config["CFB_DB_PORT"])
     }

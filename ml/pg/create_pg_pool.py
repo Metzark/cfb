@@ -8,7 +8,7 @@ def create_pg_pool():
         maxconn=10,
         dbname=getenv("CFB_DB_NAME"),
         user=getenv("CFB_DB_USER"),
-        password=getenv("CFB_DB_READONLY_PASSWORD"),
+        password=getenv("CFB_DB_PASSWORD"),
         host=getenv("MLEARNING_CFB_DB_HOST"),
         port=int(getenv("CFB_DB_PORT"))
     )
