@@ -44,10 +44,12 @@ const searchTeamsByNameQuery string = `
 	SELECT id, school
 	FROM cfb.teams t
 	WHERE
-		t.school ILIKE $1
-		OR t.alt_name1 ILIKE $1
-		OR t.alt_name2 ILIKE $1
-		OR t.alt_name3 ILIKE $1;
+		t.classification ILIKE 'fbs'
+		AND (
+			t.school ILIKE $1
+			OR t.alt_name1 ILIKE $1
+			OR t.alt_name2 ILIKE $1
+			OR t.alt_name3 ILIKE $1);
 `
 
 // Search teams by name (school name and alternative names)

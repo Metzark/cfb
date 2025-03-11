@@ -27,7 +27,7 @@ func main(){
         handle.SearchTeams(w, r, pgc)
     })
 
-    http.HandleFunc("POST /custom-query", func(w http.ResponseWriter, r *http.Request) {
+    http.HandleFunc("POST /query", func(w http.ResponseWriter, r *http.Request) {
         handle.CustomQuery(w, r, pgc)
     })
 

@@ -157,7 +157,7 @@ create_stats_table_stmt = """
 
 create_model_types_table_stmt = """
     CREATE TABLE IF NOT EXISTS cfb.model_types (
-        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         name TEXT,
         data_type VARCHAR(1)
     );
@@ -165,7 +165,7 @@ create_model_types_table_stmt = """
 
 create_targets_table_stmt = """
     CREATE TABLE IF NOT EXISTS cfb.targets (
-        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         name TEXT,
         data_type VARCHAR(1)
     );
@@ -173,9 +173,10 @@ create_targets_table_stmt = """
 
 create_models_table_stmt = """
     CREATE TABLE IF NOT EXISTS cfb.models (
-        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         model_type_id UUID REFERENCES cfb.model_types(id),
         target_id UUID REFERENCES cfb.targets(id),
+        accuracy DOUBLE PRECISION,
         metadata JSONB
     );
 """
@@ -217,6 +218,9 @@ try:
 
     # Create cfb.model_types table
     execute_stmt(cur, conn, create_model_types_table_stmt)
+
+    # Create cfb.targets table
+    execute_stmt(cur, conn, create_targets_table_stmt)
 
     # Create cfb.models table
     execute_stmt(cur, conn, create_models_table_stmt)
