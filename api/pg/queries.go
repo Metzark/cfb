@@ -5,14 +5,21 @@ import "fmt"
 
 const getTeamByIdQuery string = `
 	SELECT 
-		t.id AS team_id, t.school AS team_school, t.mascot AS team_mascot, t.abbreviation AS team_abbreviation, t.alt_name1 AS team_alt_name1,
-		t.alt_name2 AS team_alt_name2, t.alt_name3 AS team_alt_name3, t.classification AS team_classification,
-		t.color AS team_color, t.alt_color AS team_alt_color, t.twitter AS team_twitter, t.logo AS team_logo,
-		v.id AS venue_id, v.name AS venue_name, v.city AS venue_city, v.state as venue_state, v.zip AS venue_zip,
-		v.country_code AS venue_country_code, v.location_x AS venue_location_x, v.location_y AS venue_location_y,
-		v.elevation AS venue_elevation, v.year_constructed AS venue_year_constructed, v.capacity AS venue_capacity,
-		v.dome AS venue_dome, v.grass AS venue_grass, v.timezone AS venue_timezone,
-		c.id AS conference_id, c.name AS conference_name
+	t.id AS team_id, t.school AS team_school, t.mascot AS team_mascot, t.abbreviation AS team_abbreviation, t.alt_name1 AS team_alt_name1,
+	t.alt_name2 AS team_alt_name2, t.alt_name3 AS team_alt_name3, t.classification AS team_classification,
+	t.color AS team_color, t.alt_color AS team_alt_color, t.twitter AS team_twitter, t.logo AS team_logo,
+	v.id AS venue_id, v.name AS venue_name, v.city AS venue_city, v.state as venue_state, v.zip AS venue_zip,
+	v.country_code AS venue_country_code, v.location_x AS venue_location_x, v.location_y AS venue_location_y,
+	v.elevation AS venue_elevation, v.year_constructed AS venue_year_constructed, v.capacity AS venue_capacity,
+	v.dome AS venue_dome, v.grass AS venue_grass, v.timezone AS venue_timezone,
+	c.id AS conference_id, c.name AS conference_name,
+	(SELECT jsonb_agg(jsonb_build_object('team_id', t2.id, 'team_school', t2.school, 'team_logo', t2.logo, 'team_mascot', t2.mascot))
+ 		FROM (
+	         SELECT ot.id, ot.school, ot.logo, ot.mascot
+	         FROM cfb.teams AS ot
+	         WHERE ot.classification ILIKE 'fbs'
+	         ORDER BY ot.school
+ 	) t2) AS teams_list
 	FROM cfb.teams t
 	LEFT JOIN cfb.conferences c ON c.id = t.conference_id
 	LEFT JOIN cfb.venues v ON v.id = t.home_venue_id

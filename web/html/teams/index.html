@@ -15,11 +15,19 @@
     />
   </head>
   <body>
+    <svg style="display: none;">
+      <symbol id="carrot-up" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+        <path d="M182.6 137.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8l256 0c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-128-128z"/>
+      </symbol>
+      <symbol id="carrot-down" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+        <path d="M137.4 374.6c12.5 12.5 32.8 12.5 45.3 0l128-128c9.2-9.2 11.9-22.9 6.9-34.9s-16.6-19.8-29.6-19.8L32 192c-12.9 0-24.6 7.8-29.6 19.8s-2.2 25.7 6.9 34.9l128 128z"/>
+      </symbol>
+    </svg>
     <nav>
       <span class="logo">CFB</span>
       <ul>
         <a class="link" href="{{.ServerURL}}/">Home</a>
-        <a class="link active" href="{{.ServerURL}}/teams">Teams</a>
+        <a class="link active" href="{{.ServerURL}}/teams/{{.Team.Id}}">Teams</a>
         <a class="link" href="{{.ServerURL}}/predict"">Predict</a>
         <a class="link" href="{{.ServerURL}}/query">Query</a>
       </ul>
@@ -31,23 +39,11 @@
       </section>
       <section class="team">
         <ul class="tab-list">
-          <button class="active">Team</button>
-          <button>Games</button>
-          <button>Predict</button>
+          <button id="team" class="active">Team</button>
+          <button id="games">Games</button>
+          <button id="predict">Predict</button>
         </ul>
-        <div class="team-content">
-          <div class="basic-content">
-            <div>
-              <img src="{{.Team.Logo}}" alt="{{.Team.School}} Logo" />
-            </div>
-            <div>
-              <h1>{{.Team.School}} {{.Team.Mascot}}</h1>
-              <p>{{.Team.VenueCity}}, {{.Team.VenueState}}</p>
-              <p>{{.Team.ConferenceName}}</p>
-            </div>
-          </div>
-          <div></div>
-        </div>
+        <div id="content"></div>
       </section>
       <!-- <section class="section-teams" style="background: {{.Team.Color}};">
         <h1 style="color: {{.Team.AltColor}};">{{.Team.School}}</h1>
@@ -86,87 +82,246 @@
       <section></section> -->
     </main>
     <script>
-      // Element vars
-      const searchTeamList = document.getElementById("search-team-list");
-      const searchTeamInput = document.getElementById("search-team-input");
-      const nav = document.querySelector("nav");
+      const serverUrl = "{{.ServerURL}}"
+      let currentTab = "";
 
-      // State vars
-      let search = "";
-      let searching = false;
-      let searchingTimeout = null;
+      // Keep track of event handlers placed on html that gets replaced on tab change
+      const tabEventHandlers = [];
 
-      // Search teams using /search-teams route
-      function searchTeams(e){
-        search = e.target.value.trim();
+      // Global Element vars (never dynamically replaced)
+      const teamSelect = document.querySelector(".team-select");
+      const tabList = document.querySelector(".tab-list");
+      const content = document.querySelector("#content");
 
-        // On empty search, cancel old search and remove HTML
-        if(search.length < 1) {
-          searchingTimeout && clearTimeout(searchingTimeout);
-          searchTeamList.innerHTML = "";
-          return;
-        }
+      // Just load all fbs team once
+      const teams = JSON.parse(`{{.TeamsList}}`);
 
-        // URI encode the search (for spaces)
-        const encodedSearch = encodeURIComponent(search)
+      // To cache teams data for the team select
+      const teamSelectPages = new Map();
+      let currentTeamSelectPage = 0;
+      let loadingTeamSelectPage = -1;
 
-        // Only set new search if not already search (http request has already been sent)
-        if (!searching) {
-          // Clear old timeout function
-          searchingTimeout && clearTimeout(searchingTimeout);
-          
-          // Set new timeout function
-          searchingTimeout = setTimeout(async () => {
-            // Hit search-teams route and get response json
-            searching = true;
-            const res = await fetch(`{{.ServerURL}}/search-teams?search=${encodedSearch}`);
-            const json = await res.json();
-            searching = false;
+      // Initialize things on initial page load
+      function init() {
+        // Map first two pages of team select
+        teamSelectPages.set(0, teams.slice(0, 10));
+        teamSelectPages.set(1, teams.slice(10));
 
-            // Just log errors
-            if (json.error) {
-              console.error(json.error);
-            }
+        // Change pages on team select bar
+        teamSelect.addEventListener("click", handleTeamSelectPageChange);
 
-            let tmpl = "";
+        // Changes tabs on tab list button click
+        tabList.addEventListener("click", handleTabChange);
 
-            // Add returned teams to list
-            if (json.teams) {
-              for(let i = 0; i < json.teams.length; i++) {
-                tmpl += `<li><a href="{{.ServerURL}}/teams/${json.teams[i].id}"><span>${json.teams[i].school}</span></a></li>`;
-              } 
-            }
+        // Load the inital team select
+        loadTeamSelect();
 
-            searchTeamList.innerHTML = tmpl;
-          }, 1000);
-        }
+        // Load the inital 'team' content
+        loadTab("team");
       }
-      
-      // Adds hidden class to list to hide it
-      function hideSearchTeamsList(){
-        setTimeout(() => {
-          if (!nav.contains(document.activeElement)) {
-            searchTeamList.classList.add("hidden");
+
+      //#region Team Select
+
+      // Fetch data for the next page of team select bar
+      async function getNextTeamSelectPage(page){
+        try {
+          loadingTeamSelectPage = page;
+
+          const query = `
+          SELECT t.id AS team_id, t.school AS team_school, t.logo AS team_logo
+          FROM cfb.teams t
+          WHERE t.classification ILIKE 'fbs'
+          OFFSET ${page * 10}
+          LIMIT 10;
+        `;
+
+         // Hit /query
+         const res = await fetch(`{{.ServerURL}}/query`, {
+              method: "POST",
+              body: JSON.stringify({
+                query,
+              }),
+            });
+
+          const data = await res.json();
+
+          if (data.error) {
+            throw new Error(data.error);
           }
-        }, 50);
+
+          if(data.rows) teamSelectPages.set(page, data.rows);
+          
+        }
+        catch (err) {
+          console.error(err);
+        }
+        finally {
+          loadingTeamSelectPage = -1;
+        }
       }
 
-      // Remove hidden class from list to show it
-      function showSearchTeamsList(){
-        searchTeamList.classList.remove("hidden")
+      // Load html for team select bar
+      function loadTeamSelect() {
+        // Markup to insert into team select
+        let markup = `<li><button id="team-select-up"><svg class="${currentTeamSelectPage === 0 ? "disabled" : ""}"><use href="#carrot-up"/></svg></button></li>`
+
+        teamSelectPages.get(currentTeamSelectPage).forEach(t => {
+          markup += `
+            <li>
+              <a title="${t.team_school}" href="${serverUrl}/teams/${t.team_id}">
+                <img src="${t.team_logo}" alt="${t.team_school} Logo"/>
+              </a>
+            </li>
+          `;
+        });
+
+        markup += `<li><button id="team-select-down"><svg class="${teamSelectPages.get(currentTeamSelectPage).length < 10 ? "disabled" : ""}"><use href="#carrot-down"/></svg></button></li>`
+        teamSelect.innerHTML = markup;
       }
 
-      // Search input changes
-      searchTeamInput.addEventListener("input", searchTeams);
+      // Handle changing the team select bar page
+      function handleTeamSelectPageChange(e) {
+        if (e.target.tagName !== "BUTTON") return;
+        
+        // Get next page
+        const newPage = e.target.id === "team-select-up" ? currentTeamSelectPage - 1 : currentTeamSelectPage + 1;
+        
+        // Return on invalid page or if still fetching data for next page
+        if (!teamSelectPages.get(newPage) || newPage === loadingTeamSelectPage) return;
 
-      // Search input is focused
-      searchTeamInput.addEventListener("focus", showSearchTeamsList);
+        currentTeamSelectPage = newPage;
+
+        // Load html for the new page
+        loadTeamSelect();
+
+        // Prefetch data for next page
+        getNextTeamSelectPage(newPage + 1);
+      }
+
+      //#endregion Team Select
+
+      //#region Tabs
+
+      async function loadTab(tab) {
+        if (currentTab === tab) return;
+
+        // Remove any event handlers placed on dynamic tab content
+        tabEventHandlers.forEach(h => {
+          h.element.removeEventListener(h.type, h.handler);
+        })
+
+        currentTab = tab;
+        content.classList.remove("team", "games", "predict");
+        switch (tab) {
+          case "team": {
+            content.classList.add("team");
+            content.innerHTML = `
+              <div class="basic-content">
+                <div>
+                  <img src="{{.Team.Logo}}" alt="{{.Team.School}} Logo" />
+                </div>
+                <div>
+                  <h1>{{.Team.School}} {{.Team.Mascot}}</h1>
+                  <p>{{.Team.VenueCity}}, {{.Team.VenueState}}</p>
+                  <p>{{.Team.ConferenceName}}</p>
+                </div>
+              </div>
+              <div></div>
+            `;
+            break;
+          }
+          case "games": {
+            content.classList.add("games");
+            content.innerHTML = ``;
+            break;
+          }
+          case "predict": {
+            content.classList.add("predict");
+            content.innerHTML = `
+              <div class="versus">
+                <div id="team-1" class="team">
+                  <div>
+                    <img src="{{.Team.Logo}}" alt="{{.Team.School}} Logo" />
+                  </div>
+                  <div>
+                    <h2>{{.Team.School}} {{.Team.Mascot}}</h2>
+                  </div>
+                </div>
+                <div class="hosting"><span>vs</span></div>
+                <div id="team-2" class="team"></div>
+              </div>
+              <div class="options">
+                <div class="model-options"></div>
+                <div class="available-teams">
+                  ${teams.map(t=> `<button id="${t.team_id}"><img src="${t.team_logo}" alt="${t.team_school} Logo"/></button>`).join("")}
+                </div>
+              </div>
+            `;
+            initPredict();
+            break;
+          }
+        }
+      }
       
-      // Search input is unfocused
-      searchTeamInput.addEventListener("blur", hideSearchTeamsList);
+      function handleTabChange(e) {
+        if (e.target.tagName != "BUTTON") return;
 
-      // Search list is unfocused (li's of list are unfocused)
-      searchTeamList.addEventListener("focusout", hideSearchTeamsList);
+        // Remove active class from all tab buttons
+        tabList.childNodes.forEach(n => n.tagName === "BUTTON" && n.classList.remove("active"));
+
+        // Add active class to new active tab
+        e.target.classList.add("active");
+
+        // Load tab content
+        loadTab(e.target.id);
+      }
+
+      //#endregion Tabs
+
+      //#region Team
+
+      //#endregion Team
+
+      //#region Predict
+
+      function initPredict() {
+        const availableTeams = document.querySelector(".available-teams");
+
+        availableTeams.addEventListener("click", handleChangeOpposingTeam);
+
+        tabEventHandlers.push({type: "click", handler: handleChangeOpposingTeam, element: availableTeams});
+      }
+
+      function handleChangeOpposingTeam(e) {
+        if (e.target.tagName != "BUTTON") return;
+
+        const opposingTeamElement = document.querySelector("#team-2");
+
+        const id = parseInt(e.target.id);
+
+        const ot = teams.find(t => t.team_id === id);
+
+        if (!ot) return;
+
+        const availableTeams = document.querySelector(".available-teams").childNodes.forEach(n => {
+          if(n?.tagName === "BUTTON") {
+            parseInt(n.id) === ot.team_id ? n.classList.add("active") : n.classList.remove("active");
+          }
+        });
+
+        opposingTeamElement.innerHTML = `
+          <div>
+            <img src="${ot.team_logo}" alt="${ot.team_school} Logo"/>
+          </div>
+          <div>
+            <h2>${ot.team_school} ${ot.team_mascot}</h2>
+          </div>
+        `;
+      }
+
+      //#endregion Predict
+
+      init();
     </script>
   </body>
 </html>

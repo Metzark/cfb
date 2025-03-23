@@ -27,6 +27,7 @@
 
   /* Sizes */
   --nav-height: 6.8rem;
+  --mobile-nav-height: 8rem;
 }
 
 * {
@@ -73,7 +74,12 @@ nav ul {
   padding: 0 1rem;
 }
 
-nav ul .link.active {
+nav ul .link {
+  transition: all 0.3s;
+}
+
+nav ul .link.active,
+nav ul .link:hover {
   color: var(--mint_leaf);
 }
 
@@ -101,4 +107,24 @@ nav .login {
 
 main {
   position: relative;
+}
+
+@media (max-width: 37.5em) {
+  nav {
+    grid-template-columns: 10rem 1fr;
+    grid-template-rows: max-content 1fr;
+    height: var(--mobile-nav-height);
+    padding-top: 1rem;
+  }
+
+  nav ul {
+    grid-row: 2 / -1;
+    grid-column: 1 / -1;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  nav .login {
+    text-align: right;
+  }
 }

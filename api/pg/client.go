@@ -2,6 +2,7 @@ package pg
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -58,6 +59,20 @@ func PGExtract[T1 any, T2 any](s1 *T1, s2 *T2) {
 			}
 		case pgtype.Bool:
 			s2Field.Set(reflect.ValueOf(v.Bool))
+
+		case pgtype.JSONB:
+			if v.Status == pgtype.Present {
+				destType := s2Field.Type()
+				dest := reflect.New(destType).Interface()
+				err := json.Unmarshal(v.Bytes, &dest)
+				if err == nil {
+					s2Field.Set(reflect.ValueOf(dest).Elem())
+				} else {
+					fmt.Println("JSONB Unmarshal error:", err)
+				}
+			} else {
+				s2Field.Set(reflect.Zero(s2Field.Type()))
+			}
 		default:
 			if s2Field.Type() == value.Type() {
 				s2Field.Set(value)

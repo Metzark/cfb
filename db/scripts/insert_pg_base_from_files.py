@@ -30,6 +30,18 @@ insert_pg_games = """
     ON CONFLICT (id) DO NOTHING;
 """
 
+insert_pg_model_types = """
+    INSERT INTO cfb.model_types (name, data_type)
+    VALUES ('logistic', 'D');
+"""
+
+insert_pg_targets = """
+    INSERT INTO cfb.targets (name, data_type)
+    VALUES
+        ('home_team_win', 'D'),
+        ('away_team_win', 'D');
+"""
+
 #endregion
 
 try:
@@ -165,6 +177,14 @@ try:
     execute_stmt(cur, conn, insert_pg_games, games)
 
     print("Inserted games")
+
+    execute_stmt(cur, conn, insert_pg_model_types)
+
+    print("Inserted model types")
+
+    execute_stmt(cur, conn, insert_pg_targets)
+
+    print("Inserted targets")
 
     #endregion
 

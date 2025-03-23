@@ -41,11 +41,51 @@
 }
 
 .side-bar {
-  background: var(--dracula_orchid);
+  /* background: var(--dracula_orchid); */
+  padding: 1rem;
 }
 
-.side-bar .team-select {
+.team-select {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
   background: var(--dracula_orchid);
+  border-radius: 5px;
+  padding: 1rem;
+}
+
+.team-select li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.team-select li a img {
+  width: 100%;
+}
+
+.team-select li button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.team-select li button svg {
+  width: 4rem;
+  height: 4rem;
+  fill: var(--mint_leaf);
+  transition: all 0.3s;
+  pointer-events: none;
+}
+
+.team-select li button svg.disabled {
+  fill: none;
+  stroke: var(--mint_leaf);
+  stroke-width: 25px;
+  opacity: 0.4;
+  cursor: default;
 }
 
 .team {
@@ -66,8 +106,14 @@
   border-radius: 5px;
   font-weight: 600;
   cursor: pointer;
-  border: 1px solid var(--dark-dracula_orchid);
+  border: 1px solid var(--dark_dracula_orchid);
   color: var(--soothing_breeze);
+  transition: all 0.3s;
+}
+
+.tab-list button:hover,
+.tab-list button:focus {
+  color: var(--mint_leaf);
 }
 
 .tab-list button.active {
@@ -75,28 +121,117 @@
   color: var(--mint_leaf);
 }
 
-.team-content {
+#content.team {
   display: grid;
   grid-template-rows: max-content 1fr;
 }
 
-.basic-content {
+#content.team .basic-content {
   display: grid;
   grid-template-columns: 10rem 1fr;
   align-items: center;
+  column-gap: 1rem;
   padding: 1rem;
   color: var(--city_lights);
 }
 
-.basic-content img {
+#content.team .basic-content img {
   width: 10rem;
 }
 
-.basic-content h1 {
+#content.team .basic-content h1 {
   font-size: 2.4rem;
 }
 
-.basic-content p {
+#content.team .basic-content p {
   font-size: 1.8rem;
   font-weight: 600;
+}
+
+#content.predict {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  padding: 1rem;
+}
+
+#content.predict .versus {
+  display: grid;
+  grid-template-columns: 1fr max-content 1fr;
+  grid-template-rows: 1fr max-content;
+  align-items: center;
+  justify-items: center;
+}
+
+#content.predict .team {
+  display: grid;
+  grid-template-rows: 15rem max-content;
+  align-items: center;
+  justify-items: center;
+  row-gap: 1rem;
+  padding: 1rem;
+  color: var(--city_lights);
+}
+
+#content.predict .hosting {
+  color: var(--city_lights);
+  font-size: 4rem;
+}
+
+#content.predict .team img {
+  width: 15rem;
+}
+
+#content.predict .team h1 {
+  font-size: 3.2rem;
+}
+
+#content.predict .team p {
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+#content.predict .options {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+}
+
+#content.predict .options .available-teams {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 4rem);
+  grid-template-rows: repeat(auto-fill, 4rem);
+  width: fit-content;
+  max-width: 100%;
+  overflow: auto;
+  background: var(--dracula_orchid);
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+
+#content.predict .options .available-teams button {
+  background: none;
+  border: 1px solid var(--dracula_orchid);
+  transition: all 0.3s;
+  height: max-content;
+  width: max-content;
+  padding: 0.5rem;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+#content.predict .options .available-teams button.active,
+#content.predict .options .available-teams button:hover,
+#content.predict .options .available-teams button:focus {
+  border: 1px solid var(--mint_leaf)
+}
+
+#content.predict .options .available-teams button img {
+  pointer-events: none;
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+@media (max-width: 37.5em) {
+  .main-teams {
+    height: calc(100vh - var(--mobile-nav-height));
+  }
 }
