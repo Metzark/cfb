@@ -27,7 +27,7 @@
       <span class="logo">CFB</span>
       <ul>
         <a class="link" href="{{.ServerURL}}/">Home</a>
-        <a class="link" href="{{.ServerURL}}/teams">Teams</a>
+        <a class="link" href="{{.ServerURL}}/teams/2005">Teams</a>
         <a class="link" href="{{.ServerURL}}/predict"">Predict</a>
         <a class="link active" href="{{.ServerURL}}/query">Query</a>
       </ul>
@@ -255,8 +255,8 @@
           try {
             running = true;
 
-            // Hit /custom-query
-            const res = await fetch(`{{.ServerURL}}/custom-query`, {
+            // Hit /query
+            const res = await fetch(`{{.ServerURL}}/query`, {
               method: "POST",
               body: JSON.stringify({
                 query,

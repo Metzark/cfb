@@ -6,6 +6,7 @@ import pg "github.com/Metzark/cfb/api/pg"
 type TeamsTMPLParams struct {
 	Team *pg.Team `json:"team"`
 	ServerURL string `json:"serverURL"`
+	TeamsList string `json:"teams_list"`
 }
 
 // For Query HTML template

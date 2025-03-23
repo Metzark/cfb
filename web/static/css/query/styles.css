@@ -42,7 +42,7 @@
   gap: 0.5rem;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 1rem 2rem;
+  padding: 1.5rem 2rem;
   background: var(--dracula_orchid);
   border-radius: 5px;
   margin: 0.5rem 1rem 1rem 0;
@@ -178,5 +178,11 @@
   .schema {
     margin: 1rem 1rem 1rem 1rem;
 
+  }
+}
+
+@media (max-width: 37.5em) {
+  .main-query {
+    height: calc(100vh - var(--mobile-nav-height));
   }
 }

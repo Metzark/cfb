@@ -40,6 +40,7 @@ type PGTeam struct {
 	VenueDome pgtype.Bool `db:"venue_dome"`
 	ConferenceId pgtype.Int4 `db:"conference_id"`
 	ConferenceName pgtype.Text `db:"conference_name"`
+	TeamsList pgtype.JSONB  `db:"teams_list"`
 }
 
 // PG Team struct, based on Team in api.collegefootballdata.com
@@ -72,16 +73,20 @@ type Team struct {
 	VenueDome bool `json:"venue_dome"`
 	ConferenceId int32 `json:"conference_id"`
 	ConferenceName string `json:"conference_name"`
+	TeamsList []SMTeam `json:"teams_list"`
 }
 
 type PGSMTeam struct {
-	Id int `db:"id"`
-	School string `db:"school"`
+	Id int `db:"team_id"`
+	School string `db:"team_school"`
+	Logo string `db:"team_logo"`
 }
 
 type SMTeam struct {
-	Id int `json:"id"`
-	School string `json:"school"`
+	Id int `json:"team_id"`
+	School string `json:"team_school"`
+	Logo string `json:"team_logo"`
+	Mascot string `json:"team_mascot"`
 }
 
 // PG Venue struct, based on Location in api.collegefootballdata.com

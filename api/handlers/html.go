@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -43,6 +44,16 @@ func Teams(w http.ResponseWriter, r *http.Request, pgc *pg.PGC){
 	
 	// Set additional values before filling template
 	params.ServerURL = serverUrl
+
+	teamsList, err := json.Marshal(params.Team.TeamsList)
+
+	// Check that id is a valid integer
+	if err != nil {
+		http.Error(w, "Error getting additional teams", 400)
+		return
+	}
+
+	params.TeamsList = string(teamsList)
 
 	// Parse the teams html file
 	tmpl := template.Must(template.ParseFiles("web/html/teams/index.html"))
