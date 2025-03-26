@@ -1,0 +1,120 @@
+.schema {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 1.5rem 2rem;
+  background: var(--dracula_orchid);
+  border-radius: 5px;
+  margin: 0.5rem 1rem 1rem 0;
+}
+
+.schema h2 {
+  font-size: 2rem;
+  color: var(--mint_leaf);
+  border-radius: 3px;
+  margin-bottom: 1rem;
+}
+
+.schema .table {
+  background: var(--dark_dracula_orchid);
+  border-radius: 4px;
+  padding: 0.5rem;
+}
+
+.schema .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  cursor: pointer;
+  border-radius: 4px;
+  user-select: none;
+  color: var(--soothing_breeze);
+  transition: color 0.3s ease;
+}
+
+.schema .header:hover {
+  color: var(--mint_leaf);
+}
+
+.schema .header svg {
+  height: 20px;
+  width: 20px;
+  fill: var(--mint_leaf);
+  transition: transform 0.2s ease;
+}
+
+.schema .header svg.rotated {
+  transform: rotate(180deg);
+}
+
+.schema .table h3 {
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+.codeBlock {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  overflow: hidden;
+  height: auto;
+  opacity: 1;
+}
+
+.codeBlock.hidden {
+  height: 0;
+  opacity: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.codeBlock pre {
+  margin: 0;
+  padding: 1rem;
+  font-family: "Fira Code", "Consolas", monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--soothing_breeze);
+  white-space: pre;
+  tab-size: 2;
+}
+
+.codeBlock code {
+  display: block;
+  font-family: inherit;
+}
+
+.codeBlock .keyword {
+  color: #ff79c6;
+}
+
+.codeBlock .string {
+  color: #f1fa8c;
+}
+
+.codeBlock .number {
+  color: #bd93f9;
+}
+
+.codeBlock .comment {
+  color: #6272a4;
+}
+
+.schema pre {
+  font-size: 1.2rem;
+  overflow: hidden;
+  height: 100%;
+  color: var(--soothing_breeze);
+}
+
+.schema pre.hide-schema {
+  height: 0;
+}
+
+@media (max-width: 53.125em) {
+  .schema {
+    margin: 1rem 1rem 1rem 1rem;
+  }
+}

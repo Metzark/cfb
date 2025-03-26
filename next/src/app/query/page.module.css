@@ -1,0 +1,18 @@
+.main {
+  display: grid;
+  grid-template-columns: 1fr max-content;
+  height: calc(100vh - var(--nav-height));
+}
+
+@media (max-width: 53.125em) {
+  .main {
+    grid-template-columns: 1fr;
+    grid-template-rows: max-content 1fr;
+  }
+}
+
+@media (max-width: 37.5em) {
+  .main {
+    height: calc(100vh - var(--mobile-nav-height));
+  }
+}

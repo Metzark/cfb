@@ -1,0 +1,49 @@
+:root {
+  font-size: 62.5%;
+
+  /* Colors */
+  --dark_dracula_orchid: #23292b;
+  --dracula_orchid: #2d3436;
+  --america_river: #636e72;
+  --soothing_breeze: #b2bec3;
+  --city_lights: #dfe6e9;
+  --prunus_avium: #e84393;
+  --pico_8: #fd79a8;
+  --exodus_fruit: #6c5ce7;
+  --shy_moment: #a29bfe;
+  --chi_gong: #d63031;
+  --pink_glamour: #ff7675;
+  --electron_blue: #0984e3;
+  --green_darner_tailL: #74b9ff;
+  --orangeville: #e17055;
+  --first_date: #fab1a0;
+  --robins_egg_blue: #00cec9;
+  --faded_poster: #81ecec;
+  --bright_yarrow: #fdcb6e;
+  --sour_lemon: #ffeaa7;
+  --mint_leaf: #00b894;
+  --light_greenish_blue: #55efc4;
+
+  /* Sizes */
+  --nav-height: 6.8rem;
+  --mobile-nav-height: 8rem;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  height: 100vh;
+  width: 100vw;
+  background: var(--dark_dracula_orchid);
+  font-family: "Ubuntu";
+}
+
+a,
+a :visited {
+  color: inherit;
+  text-decoration: none;
+}

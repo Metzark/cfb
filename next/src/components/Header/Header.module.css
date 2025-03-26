@@ -1,0 +1,64 @@
+.nav {
+  position: relative;
+  display: grid;
+  grid-template-columns: 10rem 1fr max-content;
+  align-items: center;
+  height: var(--nav-height);
+  color: var(--city_lights);
+  z-index: 1;
+}
+
+.nav ul {
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 0 1rem;
+}
+
+.nav ul .link {
+  transition: all 0.3s;
+}
+
+.nav ul .link.active,
+.nav ul .link:hover {
+  color: var(--mint_leaf);
+}
+
+.nav .logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.2rem;
+  font-weight: 600;
+  color: var(--mint_leaf);
+}
+
+.nav .login {
+  font-size: 1.6rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 0 2rem;
+}
+
+@media (max-width: 37.5em) {
+  .nav {
+    grid-template-columns: 10rem 1fr;
+    grid-template-rows: max-content 1fr;
+    height: var(--mobile-nav-height);
+    padding-top: 1rem;
+  }
+
+  .nav ul {
+    grid-row: 2 / -1;
+    grid-column: 1 / -1;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .nav .login {
+    text-align: right;
+  }
+}

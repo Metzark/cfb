@@ -85,90 +85,6 @@
   height: 0;
 }
 
-.query {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  overflow: auto;
-}
-
-.query-option-description {
-  font-size: 2rem;
-  padding: 0 1rem;
-  color: var(--city_lights);
-}
-
-.query-textarea {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem;
-  width: 100%;
-}
-
-.query-textarea textarea {
-  resize: none;
-  width: 100%;
-  height: 10rem;
-  background-color: var(--soothing_breeze);
-  font-family: inherit;
-  outline: none;
-  border-radius: 3px;
-  padding: 0.2rem;
-}
-
-.query-textarea button {
-  background: var(--dark-dracula_orchid);
-  border: 1px solid var(--america_river);
-  border-radius: 3px;
-  padding: 0.5rem 3rem;
-  color: var(--city_lights);
-  font-size: 1.8rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  cursor: pointer;
-  width: max-content;
-}
-
-.query-textarea button:hover {
-  border: 1px solid var(--mint_leaf);
-  transition: all 0.3s;
-}
-
-.query-table-wrap {
-  padding: 1rem;
-  width: 100%;
-  overflow: auto;
-}
-
-#query-table {
-  display: block;
-  border-collapse: collapse;
-  font-size: 1.4rem;
-}
-
-#query-table tbody {
-  width: 100%;
-}
-
-#query-table th {
-  background: var(--dracula_orchid);
-  color: var(--mint_leaf);
-  border: 1px solid var(--mint_leaf);
-  padding: 0.4rem 1rem;
-}
-
-#query-table td {
-  color: var(--city_lights);
-  border: 1px solid var(--america_river);
-  padding: 0.2rem 1rem;
-}
-
-.query-error {
-  color: var(--chi_gong)
-}
-
 @media (max-width: 53.125em) {
   .main-query {
     grid-template-columns: 1fr;
@@ -177,7 +93,6 @@
 
   .schema {
     margin: 1rem 1rem 1rem 1rem;
-
   }
 }
 

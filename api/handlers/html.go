@@ -101,13 +101,7 @@ func Query(w http.ResponseWriter, r *http.Request, pgc *pg.PGC) {
 	// Write and fill in template
 	err := tmpl.Execute(w, params)
 
-<<<<<<< HEAD
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-=======
 	if err != nil {
 		fmt.Println(err)
 	}
->>>>>>> 5fc5e57 (Update search teams to pull from postgres)
 }

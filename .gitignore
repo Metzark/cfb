@@ -1,4 +1,8 @@
-db/scripts/.env
-.env
-api/.env
+**.env
 **__pycache__
+**node_modules
+**next/cache
+**next/static
+**next/build
+**next/dist
+next/.next

@@ -11,13 +11,9 @@ import (
 
 
 func main(){
-
-<<<<<<< HEAD
-=======
     // Create a postgres client (that has a pool)
     pgc := pg.CreatePGC()
 
->>>>>>> 5fc5e57 (Update search teams to pull from postgres)
     // CSS
     fs := http.FileServer(http.Dir("web/static"))
     http.Handle("GET /static/", http.StripPrefix("/static/", fs))
